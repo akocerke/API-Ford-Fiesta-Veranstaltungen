@@ -1,14 +1,15 @@
 // index.js
 const express = require("express");
+const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const dotenv = require("dotenv");
+dotenv.config();
 const { AppRouter } = require("./routes");
 const logger = require("./services/logger");
 const sequelize = require("./database/setup/database");
 const { swaggerUi, swaggerDocs } = require("./swagger/swaggerConfig");
 
-dotenv.config();
+
 
 const app = express();
 const port = process.env.PORT || 5050; // Port aus Umgebungsvariablen oder Standardport 5050
