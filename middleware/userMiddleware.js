@@ -1,8 +1,8 @@
-// middleware/authMiddleware.js
+// middleware/userMiddleware.js
 const { verifyToken } = require('../services/auth/AccessToken');
 const logger = require('../services/logger');
 
-const authMiddleware = (req, res, next) => {
+const userMiddleware = (req, res, next) => {
   const token = req.headers['authorization']?.split(' ')[1];
 
   if (!token) {
@@ -21,4 +21,4 @@ const authMiddleware = (req, res, next) => {
   next();
 };
 
-module.exports = authMiddleware;
+module.exports = userMiddleware;

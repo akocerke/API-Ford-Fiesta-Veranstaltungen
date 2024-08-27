@@ -5,15 +5,16 @@ const { EventsRouter } = require('./events');
 const { RatingsRouter } = require('./ratings');
 const { UsersRouter } = require('./users');
 const { ViolationsRouter } = require('./violations');
-const authMiddleware = require('../middleware/authMiddleware');
+const userMiddleware = require('../middleware/userMiddleware');
+const adminMiddleware =require('../middleware/adminMiddleware');
 
 const AppRouter = express.Router();
 
-AppRouter.use("/admins", authMiddleware, AdminsRouter);
+AppRouter.use("/admins", adminMiddleware, AdminsRouter);
 AppRouter.use("/comments", CommentsRouter);
 AppRouter.use("/events", EventsRouter);
 AppRouter.use("/ratings", RatingsRouter);
-AppRouter.use("/users", authMiddleware, UsersRouter);
+AppRouter.use("/users", userMiddleware, UsersRouter);
 AppRouter.use("/violations", ViolationsRouter);
 
 module.exports = { AppRouter };

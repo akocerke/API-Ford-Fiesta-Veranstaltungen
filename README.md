@@ -18,7 +18,8 @@ API-FORD-FIESTA-VERANSTALTUNGEN/
 │   └── setup/
 │       └── database.js
 ├── middleware/
-│   └── authMiddleware.js
+│   ├── adminMiddleware.js
+│   └── userMiddleware.js
 ├── routes/
 │   ├── comments/
 │   │   └── index.js
