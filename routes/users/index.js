@@ -1,15 +1,18 @@
-// routes/users/index.js
-const { Router } = require("express");
+const { Router } = require('express');
 const UsersRouter = Router();
+const User  = require('../../database/models/User'); // Importiere korrekt
+const logger = require('../../services/logger');
 
-// Beispiel-Routen für Users
-UsersRouter.get('/', (req, res) => {
-    res.json({ message: "List of users" });
+// GET all users
+UsersRouter.get('/all', async (req, res) => {
+    try {
+        const users = await User.findAll();
+        logger.info(`GET /users/all - ${users.length} users found`);
+        res.json(users);
+    } catch (err) {
+        logger.error(`Error in /users/all: ${err.message}`);
+        res.status(500).json({ message: err.message });
+    }
 });
 
-UsersRouter.post('/', (req, res) => {
-    // Logik zum Erstellen eines neuen Users
-    res.json({ message: "User created" });
-});
-
-module.exports = { UsersRouter};
+module.exports = { UsersRouter };

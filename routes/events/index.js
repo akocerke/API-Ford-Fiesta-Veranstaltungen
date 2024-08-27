@@ -1,16 +1,19 @@
-// routes/events/index.js
-const Router = require('express');
-const EventsRouter = Router();
+//  routes/events/index.js
+const express = require('express');
+const { Event } = require('../../database/models/Event'); // Import Event-Modell
+const logger = require('../../services/logger');
+const EventsRouter = express.Router();
 
-// Beispiel-Routen für Events
-EventsRouter.get('/', (req, res) => {
-    res.json({ message: "List of events" });
+// GET /events/all - Alle Events abrufen
+EventsRouter.get('/all', async (req, res) => {
+    try {
+        const events = await Event.findAll(); // Alle Events abfragen
+        logger.info(`GET /events/all - ${events.length} events found`); // Logge die Anzahl der gefundenen Events
+        res.json(events); // Antwort mit den Events senden
+    } catch (err) {
+        logger.error(`GET /events/all - Error: ${err.message}`); // Logge den Fehler
+        res.status(500).json({ message: err.message }); // Antwort mit Fehlermeldung senden
+    }
 });
 
-EventsRouter.post('/', (req, res) => {
-    // Logik zum Erstellen eines neuen Events
-    res.json({ message: "Event created" });
-});
-
-module.exports = { EventsRouter};
-
+module.exports = { EventsRouter };

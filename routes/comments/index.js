@@ -4,7 +4,7 @@ const CommentsRouter = Router();
 const Comment = require('../../database/models/Comment');
 const logger = require('../../services/logger');
 
-// GET /all
+// GET /all Kommentare
 CommentsRouter.get('/all', async (req, res) => {
     try {
         logger.info('GET /comments/all - Request received');

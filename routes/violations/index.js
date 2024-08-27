@@ -7,10 +7,7 @@ ViolationsRouter.get('/', (req, res) => {
     res.json({ message: "List of violations" });
 });
 
-ViolationsRouter.post('/', (req, res) => {
-    // Logik zum Erstellen eines neuen Violations
-    res.json({ message: "Violation created" });
-});
+
 
 module.exports = { ViolationsRouter};
 
