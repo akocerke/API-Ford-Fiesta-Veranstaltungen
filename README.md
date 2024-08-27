@@ -26,6 +26,8 @@ API-FORD-FIESTA-VERANSTALTUNGEN/
 │   │   └── index.js
 │   ├── ratings/
 │   │   └── index.js
+│   ├── admins/
+│   │   └── index.js
 │   ├── users/
 │   │   └── index.js
 │   └── violations/
