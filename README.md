@@ -1,8 +1,8 @@
-# API-Ford-Fiesta-Veranstaltungen
+## API-Ford-Fiesta-Veranstaltungen
 
 API für Besitzer und Enthusiasten des Ford Fiesta (Modelljahr 11/2001–08/2008).
 
-## Verzeichnisstruktur
+### Verzeichnisstruktur
 
 Hier ist eine Übersicht der Verzeichnisstruktur für das Projekt:
 
@@ -64,3 +64,29 @@ Die API-Dokumentation ist über Swagger verfügbar. Du kannst die API-Endpunkte 
    Nutze die Swagger-Oberfläche, um API-Endpunkte zu durchsuchen und zu testen.
 
 ![Swagger-UI](image-1.png)
+
+## Rate-Limiting
+
+Um eine faire Nutzung der API zu gewährleisten und Missbrauch zu verhindern, haben wir Rate-Limiting implementiert. Hier sind die Details:
+
+- **Rate-Limiting-Policy:** 
+  - **Zeitfenster:** 15 Minuten
+  - **Maximale Anfragen pro IP:** 100 Anfragen pro 15 Minuten
+  - **Nachricht bei Überschreitung:** „Zu viele Anfragen von dieser IP-Adresse. Bitte versuche es später erneut.“
+  - **Rate-Limit-Header:** Der Rate-Limiter sendet Header in den Antworten, die Informationen über die Rate-Limitierung enthalten.
+
+### Beispiel-Rate-Limit-Header
+
+Wenn du die Rate-Limitierung überschreitest, werden die folgenden Header in den Antworten enthalten sein:
+
+- `X-RateLimit-Limit`: Die maximale Anzahl an Anfragen, die pro Zeitfenster erlaubt sind.
+- `X-RateLimit-Remaining`: Die verbleibende Anzahl an Anfragen, die im aktuellen Zeitfenster noch möglich sind.
+- `X-RateLimit-Reset`: Der Zeitpunkt, wann die Ratenbegrenzung zurückgesetzt wird (in Sekunden seit der Unix-Zeit).
+
+Hier ist ein Beispiel, wie die Rate-Limit-Header in einer Antwort aussehen könnten:
+
+```
+X-RateLimit-Limit: 100
+X-RateLimit-Remaining: 0
+X-RateLimit-Reset: 1633075200
+```
