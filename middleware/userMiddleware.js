@@ -1,9 +1,9 @@
 // middleware/userMiddleware.js
-const { verifyToken } = require('../services/auth/AccessToken');
-const logger = require('../services/logger');
+const { verifyToken } = require("../services/auth/AccessToken");
+const logger = require("../services/logger");
 
 const userMiddleware = (req, res, next) => {
-  const token = req.headers['authorization']?.split(' ')[1];
+  const token = req.headers["authorization"]?.split(" ")[1];
 
   if (!token) {
     logger.error("Token not provided");

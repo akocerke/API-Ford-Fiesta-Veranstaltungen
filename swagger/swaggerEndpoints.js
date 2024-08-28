@@ -1,5 +1,4 @@
-// /swagger/swaggerEndpoints 
-
+// /swagger/swaggerEndpoints
 
 /**
  * @swagger

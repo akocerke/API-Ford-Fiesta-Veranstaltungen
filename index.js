@@ -9,8 +9,6 @@ const logger = require("./services/logger");
 const sequelize = require("./database/setup/database");
 const { swaggerUi, swaggerDocs } = require("./swagger/swaggerConfig");
 
-
-
 const app = express();
 const port = process.env.PORT || 5050; // Port aus Umgebungsvariablen oder Standardport 5050
 
@@ -26,7 +24,7 @@ app.get("/health", (req, res) => {
 });
 
 // Fehlerbehandlungs-Middleware
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   logger.error(`Error occurred: ${err.message}`);
   res.status(err.status || 500).json({ message: err.message });
 });
