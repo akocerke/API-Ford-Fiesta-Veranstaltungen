@@ -1,30 +1,45 @@
+// eslint.config.mjs
 import eslintConfig from "@eslint/js";
 import prettier from "eslint-plugin-prettier";
 import configPrettier from "eslint-config-prettier";
+import eslintPluginJest from "eslint-plugin-jest";
 
 export default [
-  eslintConfig.configs.recommended, // Verwendung der empfohlenen Konfiguration
-  configPrettier, // Integration von Prettier zur Konfliktvermeidung
+  eslintConfig.configs.recommended,
+  configPrettier,
   {
-    files: ["**/*.js"], // Gilt für alle JavaScript-Dateien
+    files: ["**/*.js"],
     plugins: {
       prettier,
+      jest: eslintPluginJest,
     },
     rules: {
-      "prettier/prettier": "error", // Prettier-Fehler als ESLint-Fehler behandeln
+      "prettier/prettier": "error",
     },
     languageOptions: {
-      ecmaVersion: "latest", // Verwende die neueste ECMAScript-Version
-      sourceType: "module", // Setze den Quelltyp auf Modul
+      ecmaVersion: "latest",
+      sourceType: "module",
       globals: {
-        // Definiere globale Variablen
+        // Definieren Sie globale Variablen
         require: "readonly",
         process: "readonly",
         __dirname: "readonly",
         module: "readonly",
         exports: "readonly",
         console: "readonly",
+        // Definieren Sie Jest-Globale Variablen
+        describe: "readonly",
+        it: "readonly",
+        expect: "readonly",
+        beforeAll: "readonly",
+        afterAll: "readonly",
+        beforeEach: "readonly",
+        afterEach: "readonly",
       },
     },
+    extends: [
+      "plugin:prettier/recommended",
+      "plugin:jest/recommended", // Fügt Jest-spezifische Regeln hinzu
+    ],
   },
 ];

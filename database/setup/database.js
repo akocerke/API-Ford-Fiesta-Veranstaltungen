@@ -18,6 +18,9 @@ const sequelize = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
     // Deaktiviere die Standardzeitstempel (createdAt und updatedAt)
     timestamps: false,
   },
+  dialectOptions: {
+    charset: 'utf8mb4' // Stellen Sie sicher, dass die Kodierung übereinstimmt
+  },
 });
 
 // Exportieren der Sequelize-Verbindung
