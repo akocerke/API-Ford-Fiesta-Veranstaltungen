@@ -3,6 +3,7 @@ const UsersRouter = Router();
 const User  = require('../../database/models/User'); // Importiere korrekt
 const logger = require('../../services/logger');
 
+
 // GET all users
 UsersRouter.get('/all', async (req, res) => {
     try {
@@ -14,5 +15,6 @@ UsersRouter.get('/all', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+
 
 module.exports = { UsersRouter };

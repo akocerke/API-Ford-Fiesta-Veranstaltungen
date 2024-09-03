@@ -52,15 +52,16 @@ Die API-Dokumentation ist über Swagger verfügbar. Du kannst die API-Endpunkte 
 
 ### Zugriff auf Swagger-UI
 
-1. **Server starten:** 
+1. **Server starten:**
+
    ```bash
    npm run dev
    ```
 
-2. **Swagger-UI öffnen:** 
+2. **Swagger-UI öffnen:**
    Besuche [http://localhost:5050/api-docs](http://localhost:5050/api-docs) in deinem Webbrowser.
 
-3. **API erkunden:** 
+3. **API erkunden:**
    Nutze die Swagger-Oberfläche, um API-Endpunkte zu durchsuchen und zu testen.
 
 ![Swagger-UI](image-1.png)

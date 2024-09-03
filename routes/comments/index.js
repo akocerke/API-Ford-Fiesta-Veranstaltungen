@@ -1,8 +1,8 @@
 // routes/comments/index.js
-const { Router } = require('express');
+const { Router } = require("express");
 const CommentsRouter = Router();
-const Comment = require('../../database/models/Comment');
-const logger = require('../../services/logger');
+const Comment = require("../../database/models/Comment");
+const logger = require("../../services/logger");
 
 // GET /all Kommentare
 CommentsRouter.get('/all', async (req, res) => {
@@ -17,6 +17,6 @@ CommentsRouter.get('/all', async (req, res) => {
         logger.error(`GET /comments/all - Error: ${error.message}`);
         res.status(500).json({ error: 'Fehler beim Abrufen der Kommentare' });
     }
-});
+
 
 module.exports = { CommentsRouter };

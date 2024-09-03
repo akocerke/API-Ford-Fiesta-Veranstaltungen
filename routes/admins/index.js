@@ -17,6 +17,7 @@ AdminsRouter.get('/users', async (req, res) => {
     }
 });
 
+
 // GET /admins/admins - Alle Admins abrufen
 AdminsRouter.get('/admins', async (req, res) => {
     try {
@@ -27,6 +28,6 @@ AdminsRouter.get('/admins', async (req, res) => {
         logger.error(`GET /admins/admins - Error: ${err.message}`);
         res.status(500).json({ message: err.message });
     }
-});
+
 
 module.exports = { AdminsRouter };
