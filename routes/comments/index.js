@@ -18,5 +18,5 @@ CommentsRouter.get('/all', async (req, res) => {
         res.status(500).json({ error: 'Fehler beim Abrufen der Kommentare' });
     }
 
-
+});
 module.exports = { CommentsRouter };
