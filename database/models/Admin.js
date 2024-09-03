@@ -1,9 +1,9 @@
-const { DataTypes, Model } = require("sequelize");
-const sequelize = require("../setup/database");
+const { DataTypes, Model } = require('sequelize');
+const sequelize = require('../setup/database');
 
 class Admin extends Model {
   static async findAllAdmins() {
-    return await Admin.findAll({ where: { role: "admin" } });
+    return await Admin.findAll({ where: { role: 'admin' } });
   }
 }
 
@@ -27,18 +27,18 @@ Admin.init(
       allowNull: false,
     },
     role: {
-      type: DataTypes.ENUM("user", "admin"),
-      defaultValue: "admin",
+      type: DataTypes.ENUM('user', 'admin'),
+      defaultValue: 'admin',
     },
   },
   {
     sequelize,
-    modelName: "Admin",
-    tableName: "users", // Verweist auf die gleiche Tabelle wie User
+    modelName: 'Admin',
+    tableName: 'users', // Verweist auf die gleiche Tabelle wie User
     timestamps: true, // Aktiviert automatische Timestamps
-    createdAt: "created_at", // Datenbank-Spaltenname für CreatedAt
-    updatedAt: "updated_at", // Datenbank-Spaltenname für UpdatedAt
-  },
+    createdAt: 'created_at', // Datenbank-Spaltenname für CreatedAt
+    updatedAt: 'updated_at', // Datenbank-Spaltenname für UpdatedAt
+  }
 );
 
 module.exports = Admin;

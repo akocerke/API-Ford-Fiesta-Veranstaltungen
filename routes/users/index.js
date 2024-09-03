@@ -1,10 +1,10 @@
-const { Router } = require("express");
+const { Router } = require('express');
 const UsersRouter = Router();
-const User = require("../../database/models/User"); // Importiere korrekt
-const logger = require("../../services/logger");
+const User = require('../../database/models/User'); // Importiere korrekt
+const logger = require('../../services/logger');
 
 // GET all users
-UsersRouter.get("/all", async (req, res) => {
+UsersRouter.get('/all', async (req, res) => {
   try {
     const users = await User.findAll();
     logger.info(`GET /users/all - ${users.length} users found`);

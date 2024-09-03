@@ -1,9 +1,9 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../setup/database");
-const User = require("./User");
+const { DataTypes } = require('sequelize');
+const sequelize = require('../setup/database');
+const User = require('./User');
 
 const Event = sequelize.define(
-  "Event",
+  'Event',
   {
     id: {
       type: DataTypes.INTEGER,
@@ -13,10 +13,10 @@ const Event = sequelize.define(
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      field: "user_id",
+      field: 'user_id',
       references: {
-        model: "Users",
-        key: "id",
+        model: 'Users',
+        key: 'id',
       },
     },
     title: {
@@ -36,13 +36,13 @@ const Event = sequelize.define(
   },
   {
     timestamps: true, // Aktiviert automatische Timestamps
-    createdAt: "created_at", // Datenbank-Spaltenname für CreatedAt
-    updatedAt: "updated_at", // Datenbank-Spaltenname für UpdatedAt
-    tableName: "events",
-  },
+    createdAt: 'created_at', // Datenbank-Spaltenname für CreatedAt
+    updatedAt: 'updated_at', // Datenbank-Spaltenname für UpdatedAt
+    tableName: 'events',
+  }
 );
 
 // Beziehungen definieren
-Event.belongsTo(User, { foreignKey: "userId" });
+Event.belongsTo(User, { foreignKey: 'userId' });
 
 module.exports = Event;

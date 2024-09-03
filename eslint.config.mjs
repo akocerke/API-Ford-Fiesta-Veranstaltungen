@@ -1,12 +1,13 @@
 // eslint.config.mjs
 import eslintConfig from "@eslint/js";
 import prettier from "eslint-plugin-prettier";
-import configPrettier from "eslint-config-prettier";
 import eslintPluginJest from "eslint-plugin-jest";
 
 export default [
+  // Basis-Einstellungen
   eslintConfig.configs.recommended,
-  configPrettier,
+  
+  // Konfiguration für .js-Dateien
   {
     files: ["**/*.js"],
     plugins: {
@@ -14,7 +15,16 @@ export default [
       jest: eslintPluginJest,
     },
     rules: {
-      "prettier/prettier": "error",
+      "prettier/prettier": [
+        "error",
+        {
+          // Füge hier deine Prettier-Einstellungen hinzu
+          singleQuote: true,
+          trailingComma: "es5",
+        },
+      ],
+      "no-unused-vars": "warn",
+      "no-undef": "error",
     },
     languageOptions: {
       ecmaVersion: "latest",
@@ -35,11 +45,24 @@ export default [
         afterAll: "readonly",
         beforeEach: "readonly",
         afterEach: "readonly",
+        test: "readonly",
       },
     },
-    extends: [
-      "plugin:prettier/recommended",
-      "plugin:jest/recommended", // Fügt Jest-spezifische Regeln hinzu
-    ],
+    settings: {
+      jest: {
+        version: "detect",
+      },
+    },
+  },
+
+  // Jest spezifische Konfigurationen
+  {
+    files: ["**/*.test.js"],
+    plugins: {
+      jest: eslintPluginJest,
+    },
+    rules: {
+      "jest/consistent-test-it": ["error", { "fn": "test" }],
+    },
   },
 ];

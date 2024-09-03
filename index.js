@@ -1,13 +1,13 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const bodyParser = require("body-parser");
-const cors = require("cors");
+const express = require('express');
+const dotenv = require('dotenv');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 dotenv.config();
-const { AppRouter } = require("./routes");
-const logger = require("./services/logger");
-const sequelize = require("./database/setup/database");
-const { swaggerUi, swaggerDocs } = require("./swagger/swaggerConfig");
-const rateLimit = require("express-rate-limit");
+const { AppRouter } = require('./routes');
+const logger = require('./services/logger');
+const sequelize = require('./database/setup/database');
+const { swaggerUi, swaggerDocs } = require('./swagger/swaggerConfig');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 const port = process.env.PORT || 5050;
@@ -17,7 +17,7 @@ const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 Minuten
   max: 100, // Limit jeder IP auf 100 Anfragen pro Fenster
   message:
-    "Zu viele Anfragen von dieser IP-Adresse. Bitte versuche es später erneut.",
+    'Zu viele Anfragen von dieser IP-Adresse. Bitte versuche es später erneut.',
   headers: true, // Optional: setze Rate Limit-Header in den Antworten
 });
 
@@ -28,14 +28,14 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Verwende AppRouter für alle API-Routen
-app.use("/api-ford-fiesta", limiter, AppRouter);
+app.use('/api-ford-fiesta', limiter, AppRouter);
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   logger.error(`Error occurred: ${err.message}`);
   res.status(err.status || 500).json({ message: err.message });
 });
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Exportieren Sie `app` für die Tests
 module.exports = app;
@@ -45,13 +45,13 @@ if (require.main === module) {
   sequelize
     .authenticate()
     .then(() => {
-      logger.info("Database connection has been established successfully.");
+      logger.info('Database connection has been established successfully.');
       app.listen(port, () => {
         logger.info(`API running on port ${port}`);
       });
     })
     .catch((err) => {
-      logger.error("Unable to connect to the database:", err);
+      logger.error('Unable to connect to the database:', err);
       process.exit(1);
     });
 }
