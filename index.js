@@ -30,7 +30,7 @@ app.use(bodyParser.json());
 app.use("/api-ford-fiesta", limiter, AppRouter);
 
 
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   logger.error(`Error occurred: ${err.message}`);
   res.status(err.status || 500).json({ message: err.message });
 });

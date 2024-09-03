@@ -1,3 +1,4 @@
+// database/models/Ratings.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../setup/database');
 const Event = require('./Event'); 
@@ -12,16 +13,18 @@ const Rating = sequelize.define('Rating', {
   eventId: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    field: 'event_id',
     references: {
-      model: 'Events', // Verwende den Modellnamen als String, nicht das Modell selbst
+      model: 'events',
       key: 'id'
     }
   },
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    field: 'user_id',
     references: {
-      model: 'Users', // Verwende den Modellnamen als String, nicht das Modell selbst
+      model: 'users',
       key: 'id'
     }
   },
@@ -35,6 +38,7 @@ const Rating = sequelize.define('Rating', {
   },
   createdAt: {
     type: DataTypes.DATE,
+    field: 'created_at',
     defaultValue: DataTypes.NOW
   }
 }, {
@@ -43,7 +47,7 @@ const Rating = sequelize.define('Rating', {
 });
 
 // Beziehungen definieren
-Rating.belongsTo(Event, { foreignKey: 'eventId' });
-Rating.belongsTo(User, { foreignKey: 'userId' });
+Rating.belongsTo(Event, { foreignKey: 'eventId', as: 'event' });
+Rating.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
 module.exports = Rating;
