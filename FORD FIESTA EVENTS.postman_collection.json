@@ -1,157 +1,115 @@
 {
-	"info": {
-		"_postman_id": "d87d75f8-b392-4fc3-8b57-4b3ba80a73fa",
-		"name": "FORD FIESTA EVENTS",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "31478723"
-	},
-	"item": [
-		{
-			"name": "/admins/admins",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:5050/api-ford-fiesta/admins/admins",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5050",
-					"path": [
-						"api-ford-fiesta",
-						"admins",
-						"admins"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/admins/users",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:5050/api-ford-fiesta/admins/users",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5050",
-					"path": [
-						"api-ford-fiesta",
-						"admins",
-						"users"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/users/all",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:5050/api-ford-fiesta/users/all",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5050",
-					"path": [
-						"api-ford-fiesta",
-						"users",
-						"all"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/comments/all",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:5050/api-ford-fiesta/comments/all",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5050",
-					"path": [
-						"api-ford-fiesta",
-						"comments",
-						"all"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/events/all",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:5050/api-ford-fiesta/events/all",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5050",
-					"path": [
-						"api-ford-fiesta",
-						"events",
-						"all"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/ratings/all",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:5050/api-ford-fiesta/ratings/all",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5050",
-					"path": [
-						"api-ford-fiesta",
-						"ratings",
-						"all"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/violations/all",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:5050/api-ford-fiesta/violations/all",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5050",
-					"path": [
-						"api-ford-fiesta",
-						"violations",
-						"all"
-					]
-				}
-			},
-			"response": []
-		}
-	]
+  "info": {
+    "_postman_id": "d87d75f8-b392-4fc3-8b57-4b3ba80a73fa",
+    "name": "FORD FIESTA EVENTS",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "31478723"
+  },
+  "item": [
+    {
+      "name": "/admins/admins",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5050/api-ford-fiesta/admins/admins",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5050",
+          "path": ["api-ford-fiesta", "admins", "admins"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/admins/users",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5050/api-ford-fiesta/admins/users",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5050",
+          "path": ["api-ford-fiesta", "admins", "users"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/users/all",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5050/api-ford-fiesta/users/all",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5050",
+          "path": ["api-ford-fiesta", "users", "all"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/comments/all",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5050/api-ford-fiesta/comments/all",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5050",
+          "path": ["api-ford-fiesta", "comments", "all"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/events/all",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5050/api-ford-fiesta/events/all",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5050",
+          "path": ["api-ford-fiesta", "events", "all"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/ratings/all",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5050/api-ford-fiesta/ratings/all",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5050",
+          "path": ["api-ford-fiesta", "ratings", "all"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/violations/all",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5050/api-ford-fiesta/violations/all",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5050",
+          "path": ["api-ford-fiesta", "violations", "all"]
+        }
+      },
+      "response": []
+    }
+  ]
 }

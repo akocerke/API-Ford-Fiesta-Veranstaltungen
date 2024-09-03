@@ -70,7 +70,7 @@ Die API-Dokumentation ist über Swagger verfügbar. Du kannst die API-Endpunkte 
 
 Um eine faire Nutzung der API zu gewährleisten und Missbrauch zu verhindern, haben wir Rate-Limiting implementiert. Hier sind die Details:
 
-- **Rate-Limiting-Policy:** 
+- **Rate-Limiting-Policy:**
   - **Zeitfenster:** 15 Minuten
   - **Maximale Anfragen pro IP:** 100 Anfragen pro 15 Minuten
   - **Nachricht bei Überschreitung:** „Zu viele Anfragen von dieser IP-Adresse. Bitte versuche es später erneut.“

@@ -19,7 +19,7 @@ const sequelize = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
     timestamps: false,
   },
   dialectOptions: {
-    charset: 'utf8mb4' // Stellen Sie sicher, dass die Kodierung übereinstimmt
+    charset: "utf8mb4", // Stellen Sie sicher, dass die Kodierung übereinstimmt
   },
 });
 

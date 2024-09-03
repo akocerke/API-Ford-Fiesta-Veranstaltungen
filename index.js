@@ -7,7 +7,7 @@ const { AppRouter } = require("./routes");
 const logger = require("./services/logger");
 const sequelize = require("./database/setup/database");
 const { swaggerUi, swaggerDocs } = require("./swagger/swaggerConfig");
-const rateLimit = require('express-rate-limit');
+const rateLimit = require("express-rate-limit");
 
 const app = express();
 const port = process.env.PORT || 5050;
@@ -16,7 +16,8 @@ const port = process.env.PORT || 5050;
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 Minuten
   max: 100, // Limit jeder IP auf 100 Anfragen pro Fenster
-  message: 'Zu viele Anfragen von dieser IP-Adresse. Bitte versuche es später erneut.',
+  message:
+    "Zu viele Anfragen von dieser IP-Adresse. Bitte versuche es später erneut.",
   headers: true, // Optional: setze Rate Limit-Header in den Antworten
 });
 
@@ -28,7 +29,6 @@ app.use(bodyParser.json());
 
 // Verwende AppRouter für alle API-Routen
 app.use("/api-ford-fiesta", limiter, AppRouter);
-
 
 app.use((err, req, res, next) => {
   logger.error(`Error occurred: ${err.message}`);
