@@ -41,4 +41,4 @@ const Event = sequelize.define('Event', {
 // Beziehungen definieren
 Event.belongsTo(User, { foreignKey: 'userId' });
 
-module.exports = {Event};
+module.exports = Event;
