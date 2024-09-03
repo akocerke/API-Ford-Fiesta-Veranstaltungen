@@ -1,8 +1,8 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../setup/database');
+const { DataTypes } = require("sequelize");
+const sequelize = require("../setup/database");
 
 const User = sequelize.define(
-  'User',
+  "User",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -24,16 +24,16 @@ const User = sequelize.define(
       allowNull: false,
     },
     role: {
-      type: DataTypes.ENUM('user', 'admin'),
-      defaultValue: 'user',
+      type: DataTypes.ENUM("user", "admin"),
+      defaultValue: "user",
     },
   },
   {
     timestamps: true, // Aktiviert automatische Timestamps
-    createdAt: 'created_at', // Datenbank-Spaltenname für CreatedAt
-    updatedAt: 'updated_at', // Datenbank-Spaltenname für UpdatedAt
-    tableName: 'users',
-  }
+    createdAt: "created_at", // Datenbank-Spaltenname für CreatedAt
+    updatedAt: "updated_at", // Datenbank-Spaltenname für UpdatedAt
+    tableName: "users",
+  },
 );
 
 module.exports = User;

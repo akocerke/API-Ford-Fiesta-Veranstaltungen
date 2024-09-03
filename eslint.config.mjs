@@ -6,7 +6,7 @@ import eslintPluginJest from "eslint-plugin-jest";
 export default [
   // Basis-Einstellungen
   eslintConfig.configs.recommended,
-  
+
   // Konfiguration für .js-Dateien
   {
     files: ["**/*.js"],
@@ -62,7 +62,7 @@ export default [
       jest: eslintPluginJest,
     },
     rules: {
-      "jest/consistent-test-it": ["error", { "fn": "test" }],
+      "jest/consistent-test-it": ["error", { fn: "test" }],
     },
   },
 ];

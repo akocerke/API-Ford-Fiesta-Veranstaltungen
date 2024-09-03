@@ -1,18 +1,18 @@
 // routes/ratings/index.js
-const express = require('express');
+const express = require("express");
 const RatingsRouter = express.Router();
-const logger = require('../../services/logger');
-const Rating = require('../../database/models/Rating');
-const Event = require('../../database/models/Event');
-const User = require('../../database/models/User');
+const logger = require("../../services/logger");
+const Rating = require("../../database/models/Rating");
+const Event = require("../../database/models/Event");
+const User = require("../../database/models/User");
 
 // GET /all - Alle Ratings abrufen
-RatingsRouter.get('/all', async (req, res) => {
+RatingsRouter.get("/all", async (req, res) => {
   try {
     const ratings = await Rating.findAll({
       include: [
-        { model: Event, as: 'event', attributes: ['title'] },
-        { model: User, as: 'user', attributes: ['username'] },
+        { model: Event, as: "event", attributes: ["title"] },
+        { model: User, as: "user", attributes: ["username"] },
       ],
     });
 

@@ -1,11 +1,11 @@
 // database/models/Ratings.js
-const { DataTypes } = require('sequelize');
-const sequelize = require('../setup/database');
-const Event = require('./Event');
-const User = require('./User');
+const { DataTypes } = require("sequelize");
+const sequelize = require("../setup/database");
+const Event = require("./Event");
+const User = require("./User");
 
 const Rating = sequelize.define(
-  'Rating',
+  "Rating",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -15,19 +15,19 @@ const Rating = sequelize.define(
     eventId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      field: 'event_id',
+      field: "event_id",
       references: {
-        model: 'events',
-        key: 'id',
+        model: "events",
+        key: "id",
       },
     },
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      field: 'user_id',
+      field: "user_id",
       references: {
-        model: 'users',
-        key: 'id',
+        model: "users",
+        key: "id",
       },
     },
     rating: {
@@ -40,18 +40,18 @@ const Rating = sequelize.define(
     },
     createdAt: {
       type: DataTypes.DATE,
-      field: 'created_at',
+      field: "created_at",
       defaultValue: DataTypes.NOW,
     },
   },
   {
     timestamps: false,
-    tableName: 'ratings',
-  }
+    tableName: "ratings",
+  },
 );
 
 // Beziehungen definieren
-Rating.belongsTo(Event, { foreignKey: 'eventId', as: 'event' });
-Rating.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+Rating.belongsTo(Event, { foreignKey: "eventId", as: "event" });
+Rating.belongsTo(User, { foreignKey: "userId", as: "user" });
 
 module.exports = Rating;
