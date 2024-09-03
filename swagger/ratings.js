@@ -1,0 +1,1 @@
+// swagger/ratings.js
