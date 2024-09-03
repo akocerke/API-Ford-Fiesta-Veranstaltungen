@@ -1,9 +1,9 @@
 // middleware/adminMiddleware.js
-const { verifyToken } = require('../services/auth/AccessToken');
-const logger = require('../services/logger');
+const { verifyToken } = require("../services/auth/AccessToken");
+const logger = require("../services/logger");
 
 const adminMiddleware = (req, res, next) => {
-  const token = req.headers['authorization']?.split(' ')[1];
+  const token = req.headers["authorization"]?.split(" ")[1];
 
   if (!token) {
     logger.error("Token not provided");
@@ -20,9 +20,11 @@ const adminMiddleware = (req, res, next) => {
   req.user = decoded;
 
   // Überprüfen, ob der Benutzer ein Admin ist
-  if (req.user.role !== 'admin') {
+  if (req.user.role !== "admin") {
     logger.error("Access denied: Admin rights required");
-    return res.status(403).json({ message: "Access denied: Admin rights required" });
+    return res
+      .status(403)
+      .json({ message: "Access denied: Admin rights required" });
   }
 
   logger.info("Admin access granted:", req.user);
