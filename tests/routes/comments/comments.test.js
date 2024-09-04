@@ -1,3 +1,4 @@
+// tests/routes/comments/comments.test.js
 const request = require('supertest');
 const app = require('../../../index'); // Importieren Sie die Express-Anwendung
 
