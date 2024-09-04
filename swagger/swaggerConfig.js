@@ -17,7 +17,14 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: [path.join(__dirname, 'swaggerEndpoints.js')], // Separate Dokumentationsdatei einbinden
+  apis: [
+    path.join(__dirname, 'admins.js'),
+    path.join(__dirname, 'users.js'),
+    path.join(__dirname, 'comments.js'),
+    path.join(__dirname, 'events.js'),
+    path.join(__dirname, 'ratings.js'),
+    path.join(__dirname, 'violations.js'),
+  ],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
