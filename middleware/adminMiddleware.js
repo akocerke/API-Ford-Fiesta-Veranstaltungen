@@ -3,7 +3,7 @@ const { verifyToken } = require('../services/auth/AccessToken');
 const logger = require('../services/logger');
 
 const adminMiddleware = (req, res, next) => {
-  const token = req.headers['authorization']?.split(' ')[1];
+  const token = req.headers['authorization']?.split(' ')[1]; // Token aus dem Authorization-Header
 
   if (!token) {
     logger.error('Token not provided');

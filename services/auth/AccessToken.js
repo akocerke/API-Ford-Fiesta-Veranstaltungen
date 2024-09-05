@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const generateToken = (user) => {
   return jwt.sign(
     { id: user.id, email: user.email },
-    process.env.JWT_SECRET || 'fallbackSecret', // Es ist besser, den Schlüssel aus Umgebungsvariablen zu laden
+    process.env.JWT_SECRET || 'fallbackSecret',
     { expiresIn: '1h' }
   );
 };
