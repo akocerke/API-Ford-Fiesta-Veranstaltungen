@@ -74,12 +74,17 @@ AuthRouter.post('/signup', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Neuen Benutzer erstellen
-    await User.create({
+    const newUser = await User.create({
       username,
       email,
       password: hashedPassword,
       role: 'user', // Standard-Rolle für neue Benutzer
     });
+
+    // Erfolgreiche Registrierung protokollieren
+    logger.info(
+      `Benutzer erfolgreich registriert: ID ${newUser.id}, Benutzername ${newUser.username}`
+    );
 
     // Erfolgreiche Registrierung zurückgeben
     res.status(201).json({
