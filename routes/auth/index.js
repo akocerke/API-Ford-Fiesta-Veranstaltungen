@@ -27,13 +27,8 @@ AuthRouter.post('/login', async (req, res) => {
         .json({ message: 'Ungültige Anmeldeinformationen' });
     }
 
-    // JWT-Token generieren mit Benutzer-ID und Rolle
+    // JWT-Token generieren
     const token = generateToken({ id: user.id, role: user.role });
-
-    // Token als HttpOnly-Cookie speichern
-    res.cookie('token', token, {
-      maxAge: 3600000, // 1 Stunde
-    });
 
     // Erfolgreiches Login zurückgeben
     res.status(200).json({
@@ -42,11 +37,11 @@ AuthRouter.post('/login', async (req, res) => {
         id: user.id,
         role: user.role,
       },
-      token,
+      token, // Hier den Token zurückgeben
     });
 
     // Logge den erfolgreichen Login-Versuch
-    logger.info(`Benutzer mit ID ${user.id} hat sich erfolgreich eingeloggt.`);
+    logger.info(`Benutzer mit ID ${user.id} Login erfolgreich.`);
   } catch (error) {
     logger.error('Fehler beim Login:', error.message);
     res.status(500).json({ message: 'Interner Serverfehler' });
@@ -97,39 +92,32 @@ AuthRouter.post('/signup', async (req, res) => {
 });
 
 // Logout-Route
-AuthRouter.post('/logout', (req, res) => {
+AuthRouter.post('/logout', async (req, res) => {
+  const token = req.headers['authorization']?.split(' ')[1];
+
+  if (!token) {
+    logger.error('Token nicht nicht erhalten für logout');
+    return res.status(401).json({ message: 'Token nicht nicht erhalten' });
+  }
+
   try {
-    // Token aus dem Authorization-Header lesen
-    const token = req.headers['authorization']?.split(' ')[1];
-
-    if (!token) {
-      logger.error('Kein Token zum Logout bereitgestellt.');
-      return res.status(400).json({ message: 'Kein Token bereitgestellt' });
-    }
-
-    // Token verifizieren und Benutzer-ID extrahieren
     const decoded = verifyToken(token);
     if (!decoded) {
-      logger.error('Ungültiges oder abgelaufenes Token.');
+      logger.error('Ungültiges oder abgelaufenes Token für logout');
       return res
         .status(401)
         .json({ message: 'Ungültiges oder abgelaufenes Token' });
     }
 
-    const userId = decoded.id;
+    // Optional: Implementiere hier die Logik zur Invalidierung des Tokens, falls erforderlich.
 
-    // Protokolliere, welcher Benutzer sich ausgeloggt hat
-    if (userId) {
-      logger.info(`Benutzer mit ID ${userId} hat sich erfolgreich ausgeloggt.`);
-    }
-
-    // Da der Token nur im Header verwendet wird, gibt es keine Cookie-Aktion
-    // Optional: Hier könntest du zusätzliche Logik zur Token-Invalidierung einfügen, falls nötig
+    // Logge den erfolgreichen Logout-Versuch
+    logger.info(`User mit ID ${decoded.id} Logout erfolgreich`);
 
     res.status(200).json({ message: 'Logout erfolgreich' });
   } catch (error) {
-    logger.error('Fehler beim Logout:', error.message);
-    res.status(500).json({ message: 'Interner Serverfehler' });
+    logger.error('Error during logout:', error.message);
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
 });
 

@@ -3,7 +3,7 @@ const { verifyToken } = require('../services/auth/AccessToken');
 const logger = require('../services/logger');
 
 const adminMiddleware = (req, res, next) => {
-  const token = req.headers['authorization']?.split(' ')[1]; // Token aus dem Authorization-Header
+  const token = req.headers['authorization']?.split(' ')[1];
 
   if (!token) {
     logger.error('Token not provided');
@@ -16,10 +16,6 @@ const adminMiddleware = (req, res, next) => {
     return res.status(401).json({ message: 'Invalid or expired token' });
   }
 
-  // Setzt den Benutzer im Request
-  req.user = decoded;
-
-  // Überprüfen, ob der Benutzer ein Admin ist
   if (req.user.role !== 'admin') {
     logger.error('Access denied: Admin rights required');
     return res
@@ -27,8 +23,9 @@ const adminMiddleware = (req, res, next) => {
       .json({ message: 'Access denied: Admin rights required' });
   }
 
+  req.user = decoded;
   logger.info('Admin access granted:', req.user);
-  next(); // Zugriff gewähren
+  next();
 };
 
 module.exports = adminMiddleware;

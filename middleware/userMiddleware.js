@@ -3,7 +3,7 @@ const { verifyToken } = require('../services/auth/AccessToken');
 const logger = require('../services/logger');
 
 const userMiddleware = (req, res, next) => {
-  const token = req.headers['authorization']?.split(' ')[1]; // Token aus dem Authorization-Header
+  const token = req.headers['authorization']?.split(' ')[1];
 
   if (!token) {
     logger.error('Token not provided');
@@ -18,7 +18,7 @@ const userMiddleware = (req, res, next) => {
 
   req.user = decoded;
   logger.info('User authenticated:', req.user);
-  next(); // Zugriff gewähren
+  next();
 };
 
 module.exports = userMiddleware;
