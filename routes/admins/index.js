@@ -32,46 +32,46 @@ AdminsRouter.get('/users', async (req, res) => {
   }
 });
 
-// DELETE /api/admin/events/:id - Löschen eines Events
+// DELETE /admin/events/:id - Löschen eines Events
 AdminsRouter.delete('/events/:id', async (req, res) => {
   const { id } = req.params;
   try {
     await Event.destroy({ where: { id } });
-    logger.info(`DELETE /api/admin/events/${id} - Event deleted`);
+    logger.info(`DELETE /admin/events/${id} - Event deleted`);
     res.status(200).json({ message: 'Event deleted' });
   } catch (err) {
-    logger.error(`DELETE /api/admin/events/${id} - Error: ${err.message}`);
+    logger.error(`DELETE /admin/events/${id} - Error: ${err.message}`);
     res.status(500).json({ message: err.message });
   }
 });
 
-// DELETE /api/admin/comments/:id - Löschen eines Kommentars
+// DELETE /admin/comments/:id - Löschen eines Kommentars
 AdminsRouter.delete('/comments/:id', async (req, res) => {
   const { id } = req.params;
   try {
     await Comment.destroy({ where: { id } });
-    logger.info(`DELETE /api/admin/comments/${id} - Comment deleted`);
+    logger.info(`DELETE /admin/comments/${id} - Comment deleted`);
     res.status(200).json({ message: 'Comment deleted' });
   } catch (err) {
-    logger.error(`DELETE /api/admin/comments/${id} - Error: ${err.message}`);
+    logger.error(`DELETE /admin/comments/${id} - Error: ${err.message}`);
     res.status(500).json({ message: err.message });
   }
 });
 
-// DELETE /api/admin/users/:id - Löschen eines Benutzers
+// DELETE /admin/users/:id - Löschen eines Benutzers
 AdminsRouter.delete('/users/:id', async (req, res) => {
   const { id } = req.params;
   try {
     await User.destroy({ where: { id } });
-    logger.info(`DELETE /api/admin/users/${id} - User deleted`);
+    logger.info(`DELETE /admin/users/${id} - User deleted`);
     res.status(200).json({ message: 'User deleted' });
   } catch (err) {
-    logger.error(`DELETE /api/admin/users/${id} - Error: ${err.message}`);
+    logger.error(`DELETE /admin/users/${id} - Error: ${err.message}`);
     res.status(500).json({ message: err.message });
   }
 });
 
-// PUT /api/admin/users/:id/role - Ändern der Rolle eines Benutzers
+// PUT /admin/users/:id/role - Ändern der Rolle eines Benutzers
 AdminsRouter.put('/users/:id/role', async (req, res) => {
   const { id } = req.params;
   const { role } = req.body;
@@ -80,58 +80,56 @@ AdminsRouter.put('/users/:id/role', async (req, res) => {
       return res.status(400).json({ message: 'Invalid role' });
     }
     await User.update({ role }, { where: { id } });
-    logger.info(`PUT /api/admin/users/${id}/role - Role updated to ${role}`);
+    logger.info(`PUT /admin/users/${id}/role - Role updated to ${role}`);
     res.status(200).json({ message: 'User role updated' });
   } catch (err) {
-    logger.error(`PUT /api/admin/users/${id}/role - Error: ${err.message}`);
+    logger.error(`PUT /admin/users/${id}/role - Error: ${err.message}`);
     res.status(500).json({ message: err.message });
   }
 });
 
-// GET /api/admin/violations - Abrufen aller gemeldeten Verstöße
+// GET /admin/violations - Abrufen aller gemeldeten Verstöße
 AdminsRouter.get('/violations', async (req, res) => {
   try {
     const violations = await Violation.findAll();
     logger.info(
-      `GET /api/admin/violations - ${violations.length} violations found`
+      `GET /admin/violations - ${violations.length} violations found`
     );
     res.json(violations);
   } catch (err) {
-    logger.error(`GET /api/admin/violations - Error: ${err.message}`);
+    logger.error(`GET /admin/violations - Error: ${err.message}`);
     res.status(500).json({ message: err.message });
   }
 });
 
-// PUT /api/admin/violations/:id/status - Aktualisieren des Status eines Verstoßes
+// PUT /admin/violations/:id/status - Aktualisieren des Status eines Verstoßes
 AdminsRouter.put('/violations/:id/status', async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
   try {
     await Violation.update({ status }, { where: { id } });
     logger.info(
-      `PUT /api/admin/violations/${id}/status - Status updated to ${status}`
+      `PUT /admin/violations/${id}/status - Status updated to ${status}`
     );
     res.status(200).json({ message: 'Violation status updated' });
   } catch (err) {
-    logger.error(
-      `PUT /api/admin/violations/${id}/status - Error: ${err.message}`
-    );
+    logger.error(`PUT /admin/violations/${id}/status - Error: ${err.message}`);
     res.status(500).json({ message: err.message });
   }
 });
 
-// GET /api/admin/dashboard - Abrufen von Dashboard-Daten
+// GET /admin/dashboard - Abrufen von Dashboard-Daten
 AdminsRouter.get('/dashboard', async (req, res) => {
   try {
     const userCount = await User.count();
     const eventCount = await Event.count();
     const violationCount = await Violation.count();
     logger.info(
-      `GET /api/admin/dashboard - Dashboard data: ${userCount} users, ${eventCount} events, ${violationCount} violations`
+      `GET /admin/dashboard - Dashboard data: ${userCount} users, ${eventCount} events, ${violationCount} violations`
     );
     res.json({ userCount, eventCount, violationCount });
   } catch (err) {
-    logger.error(`GET /api/admin/dashboard - Error: ${err.message}`);
+    logger.error(`GET /admin/dashboard - Error: ${err.message}`);
     res.status(500).json({ message: err.message });
   }
 });
