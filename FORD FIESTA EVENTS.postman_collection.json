@@ -2,6 +2,7 @@
 	"info": {
 		"_postman_id": "d87d75f8-b392-4fc3-8b57-4b3ba80a73fa",
 		"name": "FORD FIESTA EVENTS",
+		"description": "Diese Postman-Collection enthält alle API-Endpunkte für das Ford Fiesta Projekt. Sie umfasst die Routen für das Verwalten von Events, Kommentaren, Benutzern und Verstoßmeldungen.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "31478723"
 	},
@@ -13,7 +14,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"username\": \"testuser2\",\r\n  \"email\": \"testuser2@example.com\",\r\n  \"password\": \"Test1234!\"\r\n}\r\n",
+					"raw": "{\r\n  \"username\": \"andrea\",\r\n  \"email\": \"andrea@example.com\",\r\n  \"password\": \"Test1234!\"\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -43,7 +44,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"email\": \"testuser4@example.com\",\r\n  \"password\": \"Test1234!\"\r\n}",
+					"raw": "{\r\n  \"email\": \"andrea@example.com\",\r\n  \"password\": \"Test1234!\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -74,7 +75,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzI1NTIyNzIzLCJleHAiOjE3MjU1MjYzMjN9.y9aFObbgG2gzev4sGU6dKM8AurMPPs9R5BG2ii2s0VQ",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzI1NjA5OTA0LCJleHAiOjE3MjU2MTM1MDR9.bgmK1RSPMsO1ga6lVxzfv6qupcNi2QxulM5BKuuJkd4",
 							"type": "string"
 						}
 					]
@@ -99,9 +100,31 @@
 		},
 		{
 			"name": "/admins/admins",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI1NjI0NTUwLCJleHAiOjE3MjU2MjgxNTB9.26ymnX_x9lnTevd6tvY9_nc0CLL4uQAVS13KpDZ7_m0",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
 					"raw": "http://localhost:5050/api-ford-fiesta/admins/admins",
 					"protocol": "http",
@@ -121,6 +144,16 @@
 		{
 			"name": "/admins/users",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI1NjI0NTUwLCJleHAiOjE3MjU2MjgxNTB9.26ymnX_x9lnTevd6tvY9_nc0CLL4uQAVS13KpDZ7_m0",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -140,12 +173,22 @@
 			"response": []
 		},
 		{
-			"name": "/users/all",
+			"name": "/admins/events",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI1NjI1ODg5LCJleHAiOjE3MjU2Mjk0ODl9.5sEcxlz0DEJ0CixxF7MTn_gOXMqZpF_BUmrRC1Fm5aE",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5050/api-ford-fiesta/users/all",
+					"raw": "http://localhost:5050/api-ford-fiesta/admins/events",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -153,20 +196,30 @@
 					"port": "5050",
 					"path": [
 						"api-ford-fiesta",
-						"users",
-						"all"
+						"admins",
+						"events"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "/comments/all",
+			"name": "/admins/violations",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI1NjI1Njc3LCJleHAiOjE3MjU2MjkyNzd9.ndGLsqngQJQ808kvG1DOrw4iRasXcZAwh1rIDcQfqZA",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5050/api-ford-fiesta/comments/all",
+					"raw": "http://localhost:5050/api-ford-fiesta/admins/violations",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -174,41 +227,30 @@
 					"port": "5050",
 					"path": [
 						"api-ford-fiesta",
-						"comments",
-						"all"
+						"admins",
+						"violations"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "/events/all",
+			"name": "/admins/comments",
 			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:5050/api-ford-fiesta/events/all",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5050",
-					"path": [
-						"api-ford-fiesta",
-						"events",
-						"all"
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI1NjI1ODg5LCJleHAiOjE3MjU2Mjk0ODl9.5sEcxlz0DEJ0CixxF7MTn_gOXMqZpF_BUmrRC1Fm5aE",
+							"type": "string"
+						}
 					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/ratings/all",
-			"request": {
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5050/api-ford-fiesta/ratings/all",
+					"raw": "http://localhost:5050/api-ford-fiesta/admins/comments",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -216,29 +258,8 @@
 					"port": "5050",
 					"path": [
 						"api-ford-fiesta",
-						"ratings",
-						"all"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/violations/all",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:5050/api-ford-fiesta/violations/all",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5050",
-					"path": [
-						"api-ford-fiesta",
-						"violations",
-						"all"
+						"admins",
+						"comments"
 					]
 				}
 			},
