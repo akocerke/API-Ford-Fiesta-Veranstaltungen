@@ -1,14 +1,14 @@
 // routes/admins/index.js
 const express = require('express');
-const User = require('../../database/models/User'); // Import User-Modell
-const Admin = require('../../database/models/Admin'); // Import Admin-Modell
-const Event = require('../../database/models/Event'); // Import Event-Modell (Angenommener Modellname)
-const Comment = require('../../database/models/Comment'); // Import Comment-Modell (Angenommener Modellname)
+const User = require('../../database/models/User');
+const Admin = require('../../database/models/Admin');
+const Event = require('../../database/models/Event');
+const Comment = require('../../database/models/Comment');
 const Violation = require('../../database/models/Violation');
 const AdminsRouter = express.Router();
 const logger = require('../../services/logger');
 
-// GET /admins/admins - Alle Admins abrufen
+// GET /admins/admins - Alle Admins abrufen✅
 AdminsRouter.get('/admins', async (req, res) => {
   try {
     const admins = await Admin.findAll({ where: { role: 'admin' } });
@@ -20,7 +20,7 @@ AdminsRouter.get('/admins', async (req, res) => {
   }
 });
 
-// GET /admins/users - Alle User abrufen
+// GET /admins/users - Alle User abrufen✅
 AdminsRouter.get('/users', async (req, res) => {
   try {
     const users = await User.findAll({ where: { role: 'user' } });
@@ -28,32 +28,6 @@ AdminsRouter.get('/users', async (req, res) => {
     res.json(users);
   } catch (err) {
     logger.error(`GET /admins/users - Error: ${err.message}`);
-    res.status(500).json({ message: err.message });
-  }
-});
-
-// DELETE /admin/events/:id - Löschen eines Events
-AdminsRouter.delete('/events/:id', async (req, res) => {
-  const { id } = req.params;
-  try {
-    await Event.destroy({ where: { id } });
-    logger.info(`DELETE /admin/events/${id} - Event deleted`);
-    res.status(200).json({ message: 'Event deleted' });
-  } catch (err) {
-    logger.error(`DELETE /admin/events/${id} - Error: ${err.message}`);
-    res.status(500).json({ message: err.message });
-  }
-});
-
-// DELETE /admin/comments/:id - Löschen eines Kommentars
-AdminsRouter.delete('/comments/:id', async (req, res) => {
-  const { id } = req.params;
-  try {
-    await Comment.destroy({ where: { id } });
-    logger.info(`DELETE /admin/comments/${id} - Comment deleted`);
-    res.status(200).json({ message: 'Comment deleted' });
-  } catch (err) {
-    logger.error(`DELETE /admin/comments/${id} - Error: ${err.message}`);
     res.status(500).json({ message: err.message });
   }
 });
@@ -88,7 +62,57 @@ AdminsRouter.put('/users/:id/role', async (req, res) => {
   }
 });
 
-// GET /admin/violations - Abrufen aller gemeldeten Verstöße
+// GET /admin/events - Alle Events abrufen✅
+AdminsRouter.get('/events', async (req, res) => {
+  try {
+    const events = await Event.findAll(); // Alle Events aus der Datenbank abrufen
+    logger.info(`GET /admin/events - ${events.length} events found`);
+    res.json(events);
+  } catch (err) {
+    logger.error(`GET /admin/events - Error: ${err.message}`);
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// DELETE /admin/events/:id - Löschen eines Events
+AdminsRouter.delete('/events/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await Event.destroy({ where: { id } });
+    logger.info(`DELETE /admin/events/${id} - Event deleted`);
+    res.status(200).json({ message: 'Event deleted' });
+  } catch (err) {
+    logger.error(`DELETE /admin/events/${id} - Error: ${err.message}`);
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// GET /admin/comments - Alle Kommentare abrufen✅
+AdminsRouter.get('/comments', async (req, res) => {
+  try {
+    const comments = await Comment.findAll(); // Alle Kommentare aus der Datenbank abrufen
+    logger.info(`GET /admin/comments - ${comments.length} comments found`);
+    res.json(comments);
+  } catch (err) {
+    logger.error(`GET /admin/comments - Error: ${err.message}`);
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// DELETE /admin/comments/:id - Löschen eines Kommentars
+AdminsRouter.delete('/comments/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await Comment.destroy({ where: { id } });
+    logger.info(`DELETE /admin/comments/${id} - Comment deleted`);
+    res.status(200).json({ message: 'Comment deleted' });
+  } catch (err) {
+    logger.error(`DELETE /admin/comments/${id} - Error: ${err.message}`);
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// GET /admin/violations - Abrufen aller gemeldeten Verstöße✅
 AdminsRouter.get('/violations', async (req, res) => {
   try {
     const violations = await Violation.findAll();
@@ -102,7 +126,7 @@ AdminsRouter.get('/violations', async (req, res) => {
   }
 });
 
-// PUT /admin/violations/:id/status - Aktualisieren des Status eines Verstoßes
+// PUT /admin/violations/:id/status - Aktualisieren des Status eines Verstoßes Eintrag - pending oder resolved
 AdminsRouter.put('/violations/:id/status', async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
