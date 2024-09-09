@@ -47,22 +47,22 @@ API-FORD-FIESTA-VERANSTALTUNGEN/
 │   └── violations.yml
 │   └── swaggerConfig.js
 ├── tests/
-│   ├── admins/
-│   │   └── admins.test.js
-│   ├── comments/
-│   │   └── comments.test.js
-│   ├── events/
-│   │   └── events.test.js
-│   ├── ratings/
-│   │   └── ratings.test.js
-│   ├── users/
-│   │   └── users.test.js
-│   └── violations/
-│   │   └── violations.test.js
+│   ├── routes/
+│   │   ├── admins/
+│   │   │   └── admins.test.js
+│   │   ├── comments/
+│   │   │   └── comments.test.js
+│   │   ├── events/
+│   │   │   └── events.test.js
+│   │   ├── ratings/
+│   │   │   └── ratings.test.js
+│   │   ├── users/
+│   │   │   └── users.test.js
+│   │   ├── violations/
+│   │   │   └── violations.test.js
 │   ├── setup/
-│   │   ├── jest.setup.js
-│   │   └── test-env.js
-│   ├── test-env.js
+│   │   └── jest.setup.js
+│   └── test-env.js
 ├── .env
 ├── .env.test.local
 ├── index.js
