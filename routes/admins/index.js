@@ -32,32 +32,36 @@ AdminsRouter.get('/users', async (req, res) => {
   }
 });
 
-// DELETE /admin/users/:id - Löschen eines Benutzers
+// DELETE /admins/users/:id - Löschen eines Benutzers✅
 AdminsRouter.delete('/users/:id', async (req, res) => {
   const { id } = req.params;
   try {
     await User.destroy({ where: { id } });
-    console.log(`DELETE /admin/users/${id} - User deleted`);
+    console.log(`DELETE /admins/users/${id} - User deleted`);
     res.status(200).json({ message: 'User deleted' });
   } catch (err) {
-    console.error(`DELETE /admin/users/${id} - Error: ${err.message}`);
+    console.error(`DELETE /admins/users/${id} - Error: ${err.message}`);
     res.status(500).json({ message: err.message });
   }
 });
 
-// PUT /admin/users/:id/role - Ändern der Rolle eines Benutzers
-AdminsRouter.put('/users/:id/role', async (req, res) => {
-  const { id } = req.params;
-  const { role } = req.body;
+// PUT /admin/users/role - Ändern der Rolle eines Benutzers✅
+AdminsRouter.put('/users/role', async (req, res) => {
+  const { userId, role } = req.body; // Verwende Body-Parameter für userId und role
   try {
     if (!['admin', 'user'].includes(role)) {
       return res.status(400).json({ message: 'Invalid role' });
     }
-    await User.update({ role }, { where: { id } });
-    logger.info(`PUT /admin/users/${id}/role - Role updated to ${role}`);
+    if (!userId) {
+      return res.status(400).json({ message: 'User ID is required' });
+    }
+    await User.update({ role }, { where: { id: userId } });
+    logger.info(
+      `PUT /admins/users/role - Role updated for user ${userId} to ${role}`
+    );
     res.status(200).json({ message: 'User role updated' });
   } catch (err) {
-    logger.error(`PUT /admin/users/${id}/role - Error: ${err.message}`);
+    logger.error(`PUT /admins/users/role - Error: ${err.message}`);
     res.status(500).json({ message: err.message });
   }
 });

@@ -296,6 +296,47 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "/admins/users/role",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI1ODgzMzg1LCJleHAiOjE3MjU4ODY5ODV9.0iqSMtTv9oHnjBKjBtQjvynXIarbcOyYMod598aueXk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"userId\": 4,\r\n  \"role\": \"admin\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5050/api-ford-fiesta/admins/users/role",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5050",
+					"path": [
+						"api-ford-fiesta",
+						"admins",
+						"users",
+						"role"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
