@@ -37,10 +37,10 @@ AdminsRouter.delete('/users/:id', async (req, res) => {
   const { id } = req.params;
   try {
     await User.destroy({ where: { id } });
-    logger.info(`DELETE /admin/users/${id} - User deleted`);
+    console.log(`DELETE /admin/users/${id} - User deleted`);
     res.status(200).json({ message: 'User deleted' });
   } catch (err) {
-    logger.error(`DELETE /admin/users/${id} - Error: ${err.message}`);
+    console.error(`DELETE /admin/users/${id} - Error: ${err.message}`);
     res.status(500).json({ message: err.message });
   }
 });

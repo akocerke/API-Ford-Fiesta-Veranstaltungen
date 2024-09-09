@@ -149,7 +149,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI1NjI0NTUwLCJleHAiOjE3MjU2MjgxNTB9.26ymnX_x9lnTevd6tvY9_nc0CLL4uQAVS13KpDZ7_m0",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI1ODc5MzE5LCJleHAiOjE3MjU4ODI5MTl9.fh6JGFmeP4lqnj9fyTnM3gI2XlSSnNBg9QwzkbEHYeg",
 							"type": "string"
 						}
 					]
@@ -260,6 +260,38 @@
 						"api-ford-fiesta",
 						"admins",
 						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/admins/users/5",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI1ODc5MzE5LCJleHAiOjE3MjU4ODI5MTl9.fh6JGFmeP4lqnj9fyTnM3gI2XlSSnNBg9QwzkbEHYeg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5050/api-ford-fiesta/admins/users/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5050",
+					"path": [
+						"api-ford-fiesta",
+						"admins",
+						"users",
+						"5"
 					]
 				}
 			},

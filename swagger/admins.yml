@@ -4,7 +4,7 @@ paths:
     get:
       tags:
         - admins
-      summary: /admins/admins
+      summary: alle Admins abfragen
       security:
         - bearerAuth: []
       responses:
@@ -16,7 +16,7 @@ paths:
     get:
       tags:
         - admins
-      summary: /admins/users
+      summary: alle Users abfragen
       security:
         - bearerAuth: []
       responses:
@@ -28,7 +28,7 @@ paths:
     get:
       tags:
         - admins
-      summary: /admins/events
+      summary: alle Events abfragen
       security:
         - bearerAuth: []
       responses:
@@ -40,7 +40,7 @@ paths:
     get:
       tags:
         - admins
-      summary: /admins/violations
+      summary: alle Violations abfragen
       security:
         - bearerAuth: []
       responses:
@@ -52,7 +52,19 @@ paths:
     get:
       tags:
         - admins
-      summary: /admins/comments
+      summary: alle Comments abfragen
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /admins/users/5:
+    delete:
+      tags:
+        - admins
+      summary: Löschen eins User anhand der UserId
       security:
         - bearerAuth: []
       responses:
