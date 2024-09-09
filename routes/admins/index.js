@@ -32,15 +32,27 @@ AdminsRouter.get('/users', async (req, res) => {
   }
 });
 
-// DELETE /admins/users/:id - Löschen eines Benutzers✅
-AdminsRouter.delete('/users/:id', async (req, res) => {
-  const { id } = req.params;
+// DELETE /admins/users/delete - Löschen eines Benutzers✅
+AdminsRouter.delete('/users/delete', async (req, res) => {
+  const { id } = req.body;
+
+  // Validierung der ID
+  if (!id) {
+    return res.status(400).json({ message: 'User ID is required.' });
+  }
+
   try {
-    await User.destroy({ where: { id } });
-    console.log(`DELETE /admins/users/${id} - User deleted`);
+    // Löschen des Benutzers
+    const result = await User.destroy({ where: { id } });
+
+    if (result === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    logger.info(`DELETE /admins/users/delete - User with ID ${id} deleted`);
     res.status(200).json({ message: 'User deleted' });
   } catch (err) {
-    console.error(`DELETE /admins/users/${id} - Error: ${err.message}`);
+    logger.error(`DELETE /admins/users/delete - Error: ${err.message}`);
     res.status(500).json({ message: err.message });
   }
 });
@@ -70,23 +82,35 @@ AdminsRouter.put('/users/role', async (req, res) => {
 AdminsRouter.get('/events', async (req, res) => {
   try {
     const events = await Event.findAll(); // Alle Events aus der Datenbank abrufen
-    logger.info(`GET /admin/events - ${events.length} events found`);
+    logger.info(`GET /admins/events - ${events.length} events found`);
     res.json(events);
   } catch (err) {
-    logger.error(`GET /admin/events - Error: ${err.message}`);
+    logger.error(`GET /admins/events - Error: ${err.message}`);
     res.status(500).json({ message: err.message });
   }
 });
 
-// DELETE /admin/events/:id - Löschen eines Events
-AdminsRouter.delete('/events/:id', async (req, res) => {
-  const { id } = req.params;
+// DELETE /admin/events/delete - Löschen eines Events✅
+AdminsRouter.delete('/events/delete', async (req, res) => {
+  const { id } = req.body;
+
+  // Validierung der ID
+  if (!id) {
+    return res.status(400).json({ message: 'Event ID is required.' });
+  }
+
   try {
-    await Event.destroy({ where: { id } });
-    logger.info(`DELETE /admin/events/${id} - Event deleted`);
+    // Löschen des Events
+    const result = await Event.destroy({ where: { id } });
+
+    if (result === 0) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+
+    logger.info(`DELETE /admins/events/delete - Event with ID ${id} deleted`);
     res.status(200).json({ message: 'Event deleted' });
   } catch (err) {
-    logger.error(`DELETE /admin/events/${id} - Error: ${err.message}`);
+    logger.error(`DELETE /admins/events/delete - Error: ${err.message}`);
     res.status(500).json({ message: err.message });
   }
 });
@@ -95,23 +119,37 @@ AdminsRouter.delete('/events/:id', async (req, res) => {
 AdminsRouter.get('/comments', async (req, res) => {
   try {
     const comments = await Comment.findAll(); // Alle Kommentare aus der Datenbank abrufen
-    logger.info(`GET /admin/comments - ${comments.length} comments found`);
+    logger.info(`GET /admins/comments - ${comments.length} comments found`);
     res.json(comments);
   } catch (err) {
-    logger.error(`GET /admin/comments - Error: ${err.message}`);
+    logger.error(`GET /admins/comments - Error: ${err.message}`);
     res.status(500).json({ message: err.message });
   }
 });
 
-// DELETE /admin/comments/:id - Löschen eines Kommentars
-AdminsRouter.delete('/comments/:id', async (req, res) => {
-  const { id } = req.params;
+// DELETE /admin/comments/delete - Löschen eines Kommentars✅
+AdminsRouter.delete('/comments/delete', async (req, res) => {
+  const { id } = req.body;
+
+  // Validierung der ID
+  if (!id) {
+    return res.status(400).json({ message: 'Comment ID is required.' });
+  }
+
   try {
-    await Comment.destroy({ where: { id } });
-    logger.info(`DELETE /admin/comments/${id} - Comment deleted`);
+    // Löschen des Kommentars
+    const result = await Comment.destroy({ where: { id } });
+
+    if (result === 0) {
+      return res.status(404).json({ message: 'Comment not found' });
+    }
+
+    logger.info(
+      `DELETE /admins/comments/delete - Comment with ID ${id} deleted`
+    );
     res.status(200).json({ message: 'Comment deleted' });
   } catch (err) {
-    logger.error(`DELETE /admin/comments/${id} - Error: ${err.message}`);
+    logger.error(`DELETE /admins/comments/delete - Error: ${err.message}`);
     res.status(500).json({ message: err.message });
   }
 });
@@ -121,27 +159,48 @@ AdminsRouter.get('/violations', async (req, res) => {
   try {
     const violations = await Violation.findAll();
     logger.info(
-      `GET /admin/violations - ${violations.length} violations found`
+      `GET /admins/violations - ${violations.length} violations found`
     );
     res.json(violations);
   } catch (err) {
-    logger.error(`GET /admin/violations - Error: ${err.message}`);
+    logger.error(`GET /admins/violations - Error: ${err.message}`);
     res.status(500).json({ message: err.message });
   }
 });
 
-// PUT /admin/violations/:id/status - Aktualisieren des Status eines Verstoßes Eintrag - pending oder resolved
-AdminsRouter.put('/violations/:id/status', async (req, res) => {
-  const { id } = req.params;
-  const { status } = req.body;
+// PUT /admin/violations/status - Aktualisieren des Status eines Verstoßes Eintrags - pending oder resolved ✅
+AdminsRouter.put('/violations/status', async (req, res) => {
+  const { id, status } = req.body;
+
+  // Validierung des Status
+  if (status !== 'pending' && status !== 'resolved') {
+    return res.status(400).json({
+      message: 'Invalid status value. It must be "pending" or "resolved".',
+    });
+  }
+
+  // Validierung der ID
+  if (!id) {
+    return res.status(400).json({ message: 'ID is required.' });
+  }
+
   try {
-    await Violation.update({ status }, { where: { id } });
+    // Überprüfen, ob der Verstoß existiert
+    const [affectedRows] = await Violation.update(
+      { status },
+      { where: { id } }
+    );
+
+    if (affectedRows === 0) {
+      return res.status(404).json({ message: 'Violation not found' });
+    }
+
     logger.info(
-      `PUT /admin/violations/${id}/status - Status updated to ${status}`
+      `PUT /admins/violations/status - Status updated to ${status} for ID ${id}`
     );
     res.status(200).json({ message: 'Violation status updated' });
   } catch (err) {
-    logger.error(`PUT /admin/violations/${id}/status - Error: ${err.message}`);
+    logger.error(`PUT /admins/violations/status - Error: ${err.message}`);
     res.status(500).json({ message: err.message });
   }
 });
@@ -153,11 +212,11 @@ AdminsRouter.get('/dashboard', async (req, res) => {
     const eventCount = await Event.count();
     const violationCount = await Violation.count();
     logger.info(
-      `GET /admin/dashboard - Dashboard data: ${userCount} users, ${eventCount} events, ${violationCount} violations`
+      `GET /admins/dashboard - Dashboard data: ${userCount} users, ${eventCount} events, ${violationCount} violations`
     );
     res.json({ userCount, eventCount, violationCount });
   } catch (err) {
-    logger.error(`GET /admin/dashboard - Error: ${err.message}`);
+    logger.error(`GET /admins/dashboard - Error: ${err.message}`);
     res.status(500).json({ message: err.message });
   }
 });

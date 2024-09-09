@@ -2,7 +2,7 @@ paths:
   /auth/signup:
     post:
       tags:
-        - auth
+        - Auth
       summary: User signup
       requestBody:
         content:
@@ -21,7 +21,7 @@ paths:
   /auth/login:
     post:
       tags:
-        - auth
+        - Auth
       summary: User login
       requestBody:
         content:
@@ -39,7 +39,7 @@ paths:
   /auth/logout:
     post:
       tags:
-        - auth
+        - Auth
       summary: User logout
       security:
         - bearerAuth: []

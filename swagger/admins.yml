@@ -1,10 +1,22 @@
-openapi: 3.0.0
+openapi: 3.0.0    
 paths:
+  /admins/dashboard:
+    get:
+      tags:
+        - Admins
+      summary: Zusammenfassung aller User, Events, Violations
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
   /admins/admins:
     get:
       tags:
-        - admins
-      summary: alle Admins abfragen
+        - Admins
+      summary: Alle Admins abrufen
       security:
         - bearerAuth: []
       responses:
@@ -15,8 +27,8 @@ paths:
   /admins/users:
     get:
       tags:
-        - admins
-      summary: alle Users abfragen
+        - Admins
+      summary: Alle Benutzer abrufen
       security:
         - bearerAuth: []
       responses:
@@ -27,8 +39,8 @@ paths:
   /admins/events:
     get:
       tags:
-        - admins
-      summary: alle Events abfragen
+        - Admins
+      summary: Alle Events abrufen
       security:
         - bearerAuth: []
       responses:
@@ -39,8 +51,8 @@ paths:
   /admins/violations:
     get:
       tags:
-        - admins
-      summary: alle Violations abfragen
+        - Admins
+      summary: Alle Violations abrufen
       security:
         - bearerAuth: []
       responses:
@@ -51,8 +63,8 @@ paths:
   /admins/comments:
     get:
       tags:
-        - admins
-      summary: alle Comments abfragen
+        - Admins
+      summary: Alle Comments abrufen
       security:
         - bearerAuth: []
       responses:
@@ -63,8 +75,8 @@ paths:
   /admins/users/role:
     put:
       tags:
-        - admins
-      summary: Benutzer Rolle ändern zu Admin oder User
+        - Admins
+      summary: Benutzerrolle ändern zu "user" oder "admin"
       requestBody:
         content:
           application/json:
@@ -80,11 +92,19 @@ paths:
           description: Successful response
           content:
             application/json: {}
-  /admins/users/5:
-    delete:
+  /admins/violations/status:
+    put:
       tags:
-        - admins
-      summary: Löschen eins User anhand der UserId
+        - Admins
+      summary: Violations status ändern "resolved" oder "pending"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                id: 1
+                status: resolved
       security:
         - bearerAuth: []
       responses:
@@ -92,3 +112,138 @@ paths:
           description: Successful response
           content:
             application/json: {}
+  /admins/users/delete:
+    delete:
+      tags:
+        - Admins
+      summary: Löschen eines Users anhand der UserId
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                id: 5
+      responses:
+        '200':
+          description: Erfolgreiches Löschen des Users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User deleted
+        '404':
+          description: User nicht gefunden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found
+        '500':
+          description: Serverfehler
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error
+  /admins/events/delete:
+    delete:
+      tags:
+        - Admins
+      summary: Löschen eines Events anhand der EventId
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                id: 3
+      responses:
+        '200':
+          description: Erfolgreiches Löschen des Events
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Event deleted
+        '404':
+          description: Event nicht gefunden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Event not found
+        '500':
+          description: Serverfehler
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error
+  /admins/comments/delete:
+    delete:
+      tags:
+        - Admins
+      summary: Löschen eines Kommentars anhand der Kommentar-ID
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                id: 7
+      responses:
+        '200':
+          description: Erfolgreiches Löschen des Kommentars
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Comment deleted
+        '404':
+          description: Kommentar nicht gefunden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Comment not found
+        '500':
+          description: Serverfehler
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error
