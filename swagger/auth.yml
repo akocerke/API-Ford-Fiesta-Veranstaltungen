@@ -1,0 +1,52 @@
+paths:
+  /auth/signup:
+    post:
+      tags:
+        - auth
+      summary: User signup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                username: andrea
+                email: andrea@example.com
+                password: Test1234!
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: User login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: andrea@example.com
+                password: Test1234!
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /auth/logout:
+    post:
+      tags:
+        - auth
+      summary: User logout
+      security:
+        - bearerAuth: []
+      requestBody:
+        content: {}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
