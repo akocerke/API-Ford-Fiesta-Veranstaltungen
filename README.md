@@ -21,18 +21,12 @@ API-FORD-FIESTA-VERANSTALTUNGEN/
 │   ├── adminMiddleware.js
 │   └── userMiddleware.js
 ├── routes/
-│   ├── comments/
-│   │   └── index.js
-│   ├── events/
-│   │   └── index.js
-│   ├── ratings/
+│   ├── auth/
 │   │   └── index.js
 │   ├── admins/
 │   │   └── index.js
 │   ├── users/
 │   │   └── index.js
-│   └── violations/
-│       └── index.js
 ├── services/
 │   ├── auth/
 │   │   └── AccessToken.js
@@ -40,26 +34,14 @@ API-FORD-FIESTA-VERANSTALTUNGEN/
 ├── swagger/
 │   ├── admins.yml
 │   ├── auth.yml
-│   ├── comments.yml
-│   ├── events.yml
-│   ├── ratings.yml
 │   ├── users.yml
-│   └── violations.yml
 │   └── swaggerConfig.js
 ├── tests/
 │   ├── routes/
 │   │   ├── admins/
 │   │   │   └── admins.test.js
-│   │   ├── comments/
-│   │   │   └── comments.test.js
-│   │   ├── events/
-│   │   │   └── events.test.js
-│   │   ├── ratings/
-│   │   │   └── ratings.test.js
 │   │   ├── users/
 │   │   │   └── users.test.js
-│   │   ├── violations/
-│   │   │   └── violations.test.js
 │   ├── setup/
 │   │   └── jest.setup.js
 │   └── test-env.js
