@@ -90,7 +90,7 @@ Die API-Dokumentation ist über Swagger verfügbar. Du kannst die API-Endpunkte 
 3. **API erkunden:**
    Nutze die Swagger-Oberfläche, um API-Endpunkte zu durchsuchen und zu testen.
 
-![Swagger-UI](image-1.png)
+![Swagger-UI](image-2.png)
 
 ## Rate-Limiting
 
