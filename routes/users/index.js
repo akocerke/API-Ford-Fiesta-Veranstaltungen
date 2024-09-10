@@ -309,7 +309,7 @@ UsersRouter.post('/events/rate', async (req, res) => {
   }
 });
 
-// POST /users/events/comment - Hinzufügen eines Kommentars zu einem Event
+// POST /users/events/comment - Hinzufügen eines Kommentars zu einem Event✅
 UsersRouter.post('/events/comment', async (req, res) => {
   const userId = req.user.id; // Extrahiere die User-ID aus dem Token
   const { eventId, comment } = req.body; // Extrahiere die Event-ID und den Kommentar aus dem Body
@@ -363,6 +363,49 @@ UsersRouter.post('/events/comment', async (req, res) => {
     // Protokolliere den Fehler und sende eine Antwort
     logger.error(
       `POST /users/events/comment - Error for UserID ${userId} for EventID ${eventId}: ${error.message}`
+    );
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+// GET /users/events/event-feedback - Abrufen aller Bewertungen eines Events✅
+UsersRouter.get('/events/event-feedback', async (req, res) => {
+  const userId = req.user.id; // Extrahiere die User-ID aus dem Token
+  const { eventId } = req.body; // Extrahiere die Event-ID aus dem Body der Anfrage
+
+  // Überprüfen, ob die Event-ID bereitgestellt wurde
+  if (!eventId) {
+    logger.info('GET /users/events/event-feedback - Event ID not provided');
+    return res.status(400).json({ message: 'Event ID is required' });
+  }
+
+  try {
+    // Überprüfen, ob das Event existiert
+    const eventExists = await Event.findByPk(eventId);
+
+    if (!eventExists) {
+      logger.info(
+        `GET /users/events/event-feedback - EventID ${eventId} not found`
+      );
+      return res.status(404).json({ message: 'Event not found' });
+    }
+
+    // Abrufen aller Bewertungen für das Event aus der Ratings-Tabelle
+    const ratings = await Rating.findAll({
+      where: { eventId },
+    });
+
+    // Logge die Anzahl der Bewertungen zusammen mit den Bewertungen
+    logger.info(
+      `GET /users/events/event-feedback - UserID: ${userId} - Fetched: ${ratings.length} ratings for EventID: ${eventId}`
+    );
+
+    // Sende die Bewertungen als Antwort zurück
+    res.status(200).json(ratings);
+  } catch (error) {
+    // Protokolliere den Fehler und sende eine Antwort
+    logger.error(
+      `GET /users/events/event-feedback - Error for UserID ${userId} for EventID ${eventId}: ${error.message}`
     );
     res.status(500).json({ message: 'Server Error' });
   }
