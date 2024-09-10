@@ -58,7 +58,7 @@ UsersRouter.get('/dashboard', async (req, res) => {
   }
 });
 
-// GET /users/profile - Abrufen der Profilinformationen des angemeldeten Benutzers
+// GET /users/profile - Abrufen der Profilinformationen des angemeldeten Benutzers✅
 UsersRouter.get('/profile', async (req, res) => {
   const userId = req.user.id; // Extrahiere die User-ID aus dem Token
 
@@ -91,4 +91,27 @@ UsersRouter.get('/profile', async (req, res) => {
   }
 });
 
+// GET /users/events - Abrufen aller Events des angemeldeten Benutzers✅
+UsersRouter.get('/events', async (req, res) => {
+  const userId = req.user.id; // Extrahiere die User-ID aus dem Token
+
+  try {
+    // Datenbank-Abfrage für alle Events des Benutzers
+    const events = await Event.findAll({ where: { user_id: userId } });
+
+    // Logge die Anzahl der gefundenen Events
+    logger.info(
+      `GET /users/events - UserID: ${userId} - Found ${events.length} events`
+    );
+
+    // Sende die Events als Antwort zurück
+    res.json(events);
+  } catch (error) {
+    // Protokolliere den Fehler und sende eine Antwort
+    logger.error(
+      `GET /users/events - Error for UserID ${userId}: ${error.message}`
+    );
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
 module.exports = { UsersRouter };
