@@ -38,9 +38,35 @@ API-FORD-FIESTA-VERANSTALTUNGEN/
 │   │   └── AccessToken.js
 │   └── logger.js
 ├── swagger/
+│   ├── admins.yml
+│   ├── auth.yml
+│   ├── comments.yml
+│   ├── events.yml
+│   ├── ratings.yml
+│   ├── users.yml
+│   └── violations.yml
 │   └── swaggerConfig.js
+├── tests/
+│   ├── routes/
+│   │   ├── admins/
+│   │   │   └── admins.test.js
+│   │   ├── comments/
+│   │   │   └── comments.test.js
+│   │   ├── events/
+│   │   │   └── events.test.js
+│   │   ├── ratings/
+│   │   │   └── ratings.test.js
+│   │   ├── users/
+│   │   │   └── users.test.js
+│   │   ├── violations/
+│   │   │   └── violations.test.js
+│   ├── setup/
+│   │   └── jest.setup.js
+│   └── test-env.js
 ├── .env
+├── .env.test.local
 ├── index.js
+├── jest.config.js
 └── package.json
 ```
 
