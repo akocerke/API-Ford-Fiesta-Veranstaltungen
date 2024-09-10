@@ -115,7 +115,7 @@ UsersRouter.get('/events', async (req, res) => {
   }
 });
 
-// POST /users/events/create - Erstellen eines neuen Events durch den Benutzer
+// POST /users/events/create - Erstellen eines neuen Events durch den Benutzer✅
 UsersRouter.post('/events/create', async (req, res) => {
   const userId = req.user.id; // Extrahiere die User-ID aus dem Token
   const { title, description, date, image } = req.body;
@@ -146,6 +146,66 @@ UsersRouter.post('/events/create', async (req, res) => {
     // Protokolliere den Fehler und sende eine Antwort
     logger.error(
       `POST /users/events/create - Error for UserID ${userId}: ${error.message}`
+    );
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+// PUT /users/events/update - Bearbeiten eines Events, das der Benutzer erstellt hat
+UsersRouter.put('/events/update', async (req, res) => {
+  const userId = req.user.id; // Extrahiere die User-ID aus dem Token
+  const { id, title, description, date, image } = req.body; // Die ID des zu bearbeitenden Events und die neuen Daten
+
+  // Überprüfen, ob die ID des Events bereitgestellt wurde
+  if (!id) {
+    return res.status(400).json({ message: 'Event ID is required' });
+  }
+
+  // Überprüfen, ob alle erforderlichen Felder bereitgestellt wurden
+  if (!title && !description && !date && !image) {
+    return res
+      .status(400)
+      .json({ message: 'At least one field to update is required' });
+  }
+
+  try {
+    // Finden des Events basierend auf der ID und der User-ID
+    const event = await Event.findOne({
+      where: {
+        id,
+        user_id: userId,
+      },
+    });
+
+    // Überprüfen, ob das Event existiert und ob der Benutzer der Ersteller ist
+    if (!event) {
+      logger.info(
+        `PUT /users/events/update - Event with ID ${id} not found or UserID ${userId} is not the creator`
+      );
+      return res
+        .status(404)
+        .json({ message: 'Event not found or User is not the creator' });
+    }
+
+    // Aktualisieren des Events mit den bereitgestellten Daten
+    const updatedEvent = await event.update({
+      title: title || event.title,
+      description: description || event.description,
+      date: date || event.date,
+      image: image || event.image,
+    });
+
+    // Logge die Aktualisierung des Events
+    logger.info(
+      `PUT /users/events/update - UserID: ${userId} - Updated event with ID ${updatedEvent.id}`
+    );
+
+    // Sende eine Bestätigung der Aktualisierung als Antwort zurück
+    res.json({ message: 'Event updated successfully' });
+  } catch (error) {
+    // Protokolliere den Fehler und sende eine Antwort
+    logger.error(
+      `PUT /users/events/update - Error for UserID ${userId}: ${error.message}`
     );
     res.status(500).json({ message: 'Server Error' });
   }
