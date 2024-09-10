@@ -247,7 +247,7 @@ UsersRouter.delete('/events/delete', async (req, res) => {
   }
 });
 
-// POST /users/events/rate - Hinzufügen einer Bewertung zu einem Event
+// POST /users/events/rate - Hinzufügen einer Bewertung zu einem Event✅
 UsersRouter.post('/events/rate', async (req, res) => {
   const userId = req.user.id; // Extrahiere die User-ID aus dem Token
   const { eventId, rating } = req.body;
@@ -304,6 +304,65 @@ UsersRouter.post('/events/rate', async (req, res) => {
     // Protokolliere den Fehler und sende eine Antwort
     logger.error(
       `POST /users/events/rate - Error for UserID ${userId} for EventID ${eventId}: ${error.message}`
+    );
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+// POST /users/events/comment - Hinzufügen eines Kommentars zu einem Event
+UsersRouter.post('/events/comment', async (req, res) => {
+  const userId = req.user.id; // Extrahiere die User-ID aus dem Token
+  const { eventId, comment } = req.body; // Extrahiere die Event-ID und den Kommentar aus dem Body
+
+  // Überprüfen, ob alle erforderlichen Felder bereitgestellt wurden
+  if (!eventId || !comment) {
+    return res.status(400).json({ message: 'Missing required fields' });
+  }
+
+  try {
+    // Überprüfen, ob das Event existiert
+    const eventExists = await Event.findByPk(eventId);
+
+    if (!eventExists) {
+      logger.info(`POST /users/events/comment - EventID ${eventId} not found`);
+      return res.status(404).json({ message: 'Event not found' });
+    }
+
+    // Überprüfen, ob der Benutzer bereits einen Kommentar zu diesem Event abgegeben hat
+    const existingComment = await Comment.findOne({
+      where: {
+        event_id: eventId,
+        user_id: userId,
+      },
+    });
+
+    if (existingComment) {
+      logger.info(
+        `POST /users/events/comment - UserID ${userId} has already commented on EventID ${eventId}`
+      );
+      return res
+        .status(400)
+        .json({ message: 'You have already commented on this event' });
+    }
+
+    // Erstellen eines neuen Kommentars in der Datenbank
+    await Comment.create({
+      event_id: eventId, // Verwende den richtigen Feldnamen
+      user_id: userId, // Verwende die User-ID aus dem Token
+      comment,
+    });
+
+    // Logge die Erstellung des neuen Kommentars
+    logger.info(
+      `POST /users/events/comment - UserID: ${userId} - Added comment for EventID ${eventId}`
+    );
+
+    // Sende eine Bestätigung der Kommentar-Erstellung als Antwort zurück
+    res.status(201).json({ message: 'Comment added successfully' });
+  } catch (error) {
+    // Protokolliere den Fehler und sende eine Antwort
+    logger.error(
+      `POST /users/events/comment - Error for UserID ${userId} for EventID ${eventId}: ${error.message}`
     );
     res.status(500).json({ message: 'Server Error' });
   }
