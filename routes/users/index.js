@@ -247,5 +247,66 @@ UsersRouter.delete('/events/delete', async (req, res) => {
   }
 });
 
+// POST /users/events/rate - Hinzufügen einer Bewertung zu einem Event
+UsersRouter.post('/events/rate', async (req, res) => {
+  const userId = req.user.id; // Extrahiere die User-ID aus dem Token
+  const { eventId, rating } = req.body;
+
+  // Überprüfen, ob alle erforderlichen Felder bereitgestellt wurden
+  if (!eventId || !rating) {
+    return res.status(400).json({ message: 'Missing required fields' });
+  }
+
+  // Überprüfen, ob die Bewertung im gültigen Bereich ist
+  if (rating < 1 || rating > 5) {
+    return res.status(400).json({ message: 'Rating must be between 1 and 5' });
+  }
+
+  try {
+    // Überprüfen, ob das Event existiert
+    const event = await Event.findByPk(eventId);
+    if (!event) {
+      // Logge den Fehler, wenn das Event nicht gefunden wird
+      logger.info(`POST /users/events/rate - EventID ${eventId} not found`);
+      return res.status(404).json({ message: 'Event not found' });
+    }
+
+    // Überprüfen, ob der Benutzer bereits eine Bewertung für dieses Event abgegeben hat
+    const existingRating = await Rating.findOne({
+      where: { eventId, userId },
+    });
+
+    if (existingRating) {
+      // Logge, wenn der Benutzer bereits bewertet hat
+      logger.info(
+        `POST /users/events/rate - UserID ${userId} has already rated EventID ${eventId}`
+      );
+      return res
+        .status(400)
+        .json({ message: 'You have already rated this event' });
+    }
+
+    // Erstellen einer neuen Bewertung in der Datenbank
+    await Rating.create({
+      eventId,
+      userId,
+      rating,
+    });
+
+    // Logge die Erstellung der neuen Bewertung
+    logger.info(
+      `POST /users/events/rate - UserID: ${userId} - Added rating ${rating} for EventID ${eventId}`
+    );
+
+    // Sende eine Bestätigung der Bewertung als Antwort zurück
+    res.status(201).json({ message: 'Rating added successfully' });
+  } catch (error) {
+    // Protokolliere den Fehler und sende eine Antwort
+    logger.error(
+      `POST /users/events/rate - Error for UserID ${userId} for EventID ${eventId}: ${error.message}`
+    );
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
 
 module.exports = { UsersRouter };
