@@ -151,7 +151,7 @@ UsersRouter.post('/events/create', async (req, res) => {
   }
 });
 
-// PUT /users/events/update - Bearbeiten eines Events, das der Benutzer erstellt hat
+// PUT /users/events/update - Bearbeiten eines Events, das der Benutzer erstellt hat✅
 UsersRouter.put('/events/update', async (req, res) => {
   const userId = req.user.id; // Extrahiere die User-ID aus dem Token
   const { id, title, description, date, image } = req.body; // Die ID des zu bearbeitenden Events und die neuen Daten
@@ -210,5 +210,42 @@ UsersRouter.put('/events/update', async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 });
+
+// DELETE /users/events/delete - Löschen eines Events durch den Benutzer✅
+UsersRouter.delete('/events/delete', async (req, res) => {
+  const userId = req.user.id; // Extrahiere die User-ID aus dem Token
+  const { eventId } = req.body; // Die Event-ID wird im Body übergeben
+
+  try {
+    // Finde das Event und überprüfe, ob es dem Benutzer gehört
+    const event = await Event.findOne({
+      where: { id: eventId, userId: userId },
+    });
+
+    if (!event) {
+      return res
+        .status(404)
+        .json({ message: 'Event not found or unauthorized' });
+    }
+
+    // Lösche das Event
+    await event.destroy();
+
+    // Logge das Löschen des Events
+    logger.info(
+      `DELETE /users/events/delete - UserID: ${userId} - Deleted event with ID ${eventId}`
+    );
+
+    // Bestätige das Löschen
+    res.status(200).json({ message: 'Event deleted successfully' });
+  } catch (error) {
+    // Fehlerprotokollierung
+    logger.error(
+      `DELETE /users/events/delete - Error for UserID ${userId}: ${error.message}`
+    );
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
 
 module.exports = { UsersRouter };
