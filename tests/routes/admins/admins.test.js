@@ -44,3 +44,32 @@ describe('GET /api-ford-fiesta/admin/all (Fehlerfälle)', () => {
     await request(app).get('/api-ford-fiesta/admin/invalidroute').expect(404);
   });
 });
+
+describe('GET /api-ford-fiesta/admins/dashboard - Zugriff als normaler User', () => {
+  let userToken; // Speichert den Token für den User
+
+  // Vor den Tests einen User-Token anfordern
+  beforeAll(async () => {
+    const res = await request(app).post('/api-ford-fiesta/auth/login').send({
+      email: 'testuser1@example.com',
+      password: 'Test1234!',
+    });
+
+    userToken = res.body.token; // Speichere den Token aus der Antwort
+  });
+
+  // Test für den Zugriff eines normalen Benutzers auf das Admin-Dashboard
+  test('sollte den Zugriff verweigern und Status 403 zurückgeben', async () => {
+    const res = await request(app)
+      .get('/api-ford-fiesta/admins/dashboard') // Überprüfe den vollständigen Pfad
+      .set('Authorization', `Bearer ${userToken}`)
+      .expect(403); // Erwarte 403 Forbidden
+
+    // Optional: Überprüfe die Fehlermeldung
+    if (res.body.message) {
+      expect(res.body.message).toBe('Access denied: Admin rights required');
+    } else {
+      console.log('Error Response:', res.text); // Ausgabe des Fehlers für Debugging
+    }
+  });
+});
