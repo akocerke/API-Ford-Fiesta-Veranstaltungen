@@ -1,12 +1,13 @@
 const { Router } = require('express');
 const UsersRouter = Router();
+const User = require('../../database/models/User');
 const Event = require('../../database/models/Event');
 const Comment = require('../../database/models/Comment');
 const Violation = require('../../database/models/Violation');
 const Rating = require('../../database/models/Rating');
 const logger = require('../../services/logger');
 
-// GET /users/dashboard - Gibt eine Übersicht von Events, Ratings, Comments und Violations des angemeldeten Benutzers zurück.
+// GET /users/dashboard - Gibt eine Übersicht von Events, Ratings, Comments und Violations des angemeldeten Benutzers zurück.✅
 UsersRouter.get('/dashboard', async (req, res) => {
   const userId = req.user.id; // Extrahiere die User-ID aus dem Token
 
@@ -54,6 +55,39 @@ UsersRouter.get('/dashboard', async (req, res) => {
       `Error fetching dashboard data for user ${userId}: ${error.message}`
     );
     res.status(500).send('Server Error');
+  }
+});
+
+// GET /users/profile - Abrufen der Profilinformationen des angemeldeten Benutzers
+UsersRouter.get('/profile', async (req, res) => {
+  const userId = req.user.id; // Extrahiere die User-ID aus dem Token
+
+  try {
+    // Datenbank-Abfrage für Benutzerprofil
+    const user = await User.findByPk(userId);
+
+    if (!user) {
+      logger.info(`GET /users/profile - UserID: ${userId} not found`);
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Logge, dass Daten gefunden wurden
+    logger.info(`GET /users/profile - UserID: ${userId} profile data found`);
+
+    // Sende die Benutzerprofil-Daten als Antwort zurück
+    res.json({
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      createdAt: user.created_at,
+    });
+  } catch (error) {
+    // Protokolliere den Fehler und sende eine Antwort
+    logger.error(
+      `GET /users/profile - Error for UserID ${userId}: ${error.message}`
+    );
+    res.status(500).json({ message: 'Server Error' });
   }
 });
 
