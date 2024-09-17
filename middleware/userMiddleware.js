@@ -1,4 +1,3 @@
-// middleware/userMiddleware.js
 const { verifyToken } = require('../services/auth/AccessToken');
 const logger = require('../services/logger');
 
@@ -17,7 +16,11 @@ const userMiddleware = (req, res, next) => {
   }
 
   req.user = decoded;
+
+  // Logge den dekodierten Token-Inhalt
   logger.info('User authenticated:', req.user);
+  logger.info('Decoded token:', decoded);
+
   next();
 };
 
