@@ -1,27 +1,28 @@
-// tests/routes/users/users.test.js
 const request = require('supertest');
 const app = require('../../../index');
-const User = require('../../../database/models/User');
 const Event = require('../../../database/models/Event');
 const Rating = require('../../../database/models/Rating');
 const Comment = require('../../../database/models/Comment');
+
 describe('User Routes', () => {
   let token;
   let eventId;
 
   beforeAll(async () => {
-    // Erstelle den Testbenutzer
-    await User.create({
-      email: 'testuser2@example.com',
-      password: 'Test1234!',
-      // Weitere erforderliche Felder
-    });
+    // Benutzer registrieren
+    await request(app)
+      .post('/auth/signup') // Registrierungs-Endpunkt
+      .send({
+        email: 'testuser6@example.com',
+        password: 'Test1234!',
+        // Weitere erforderliche Felder
+      });
 
     // Login für den Testbenutzer
     const loginResponse = await request(app)
       .post('/auth/login') // Dein Login-Endpunkt
       .send({
-        email: 'testuser1@example.com',
+        email: 'testuser6@example.com',
         password: 'Test1234!',
       });
 
@@ -76,13 +77,4 @@ describe('User Routes', () => {
   });
 
   // Weitere Tests hinzufügen
-
-  afterAll(async () => {
-    // Bereinige die Testdaten
-    await User.destroy({ where: { email: 'testuser1@example.com' } });
-    await Event.destroy({ where: { id: eventId } });
-    await Rating.destroy({ where: { eventId } });
-    await Comment.destroy({ where: { eventId } });
-  });
 });
-
