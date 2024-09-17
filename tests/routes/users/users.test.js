@@ -12,8 +12,8 @@ describe('Benutzer-Routen', () => {
     const signupResponse = await request(app)
       .post('/api-ford-fiesta/auth/signup') // Registrierungs-Endpunkt
       .send({
-        username: 'testuser13',
-        email: 'testuser13@example.com',
+        username: 'testuser14',
+        email: 'testuser14@example.com',
         password: 'Test1234!',
       });
 
@@ -23,7 +23,7 @@ describe('Benutzer-Routen', () => {
     const loginResponse = await request(app)
       .post('/api-ford-fiesta/auth/login') // Login-Endpunkt
       .send({
-        email: 'testuser13@example.com',
+        email: 'testuser14@example.com',
         password: 'Test1234!',
       });
 
