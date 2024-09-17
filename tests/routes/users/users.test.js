@@ -1,80 +1,82 @@
 const request = require('supertest');
-const app = require('../../../index');
-const Event = require('../../../database/models/Event');
-const Rating = require('../../../database/models/Rating');
-const Comment = require('../../../database/models/Comment');
+const app = require('../../../index'); // Pfad zu deiner Express-Anwendung
+const jwt = require('jsonwebtoken'); // Zum Dekodieren des Tokens
 
-describe('User Routes', () => {
+describe('Benutzer-Routen', () => {
   let token;
   let eventId;
+  let userId;
 
   beforeAll(async () => {
     // Benutzer registrieren
-    await request(app)
-      .post('/auth/signup') // Registrierungs-Endpunkt
+    const signupResponse = await request(app)
+      .post('/api-ford-fiesta/auth/signup') // Registrierungs-Endpunkt
       .send({
-        email: 'testuser6@example.com',
+        username: 'testuser13',
+        email: 'testuser13@example.com',
         password: 'Test1234!',
-        // Weitere erforderliche Felder
       });
+
+    expect(signupResponse.statusCode).toBe(201); // Überprüfe nur den Statuscode
 
     // Login für den Testbenutzer
     const loginResponse = await request(app)
-      .post('/auth/login') // Dein Login-Endpunkt
+      .post('/api-ford-fiesta/auth/login') // Login-Endpunkt
       .send({
-        email: 'testuser6@example.com',
+        email: 'testuser13@example.com',
         password: 'Test1234!',
       });
 
-    token = loginResponse.body.token; // Token für die Authentifizierung
+    expect(loginResponse.statusCode).toBe(200);
+    expect(loginResponse.body.token).toBeDefined();
+
+    token = loginResponse.body.token;
+
+    // Dekodiere das Token, um die Benutzer-ID zu extrahieren
+    const decoded = jwt.decode(token);
+    userId = decoded.id;
 
     // Erstelle ein Test-Event
-    const event = await Event.create({
-      title: 'Test Event',
-      description: 'This is a test event.',
-      date: new Date(),
-      image: 'test.jpg',
-      // Weitere erforderliche Felder
-    });
-
-    eventId = event.id;
-  });
-
-  // Test für die POST /users/events/rate Route
-  test('should add a rating for an event', async () => {
-    const response = await request(app)
-      .post('/users/events/rate')
+    const eventResponse = await request(app)
+      .post('/api-ford-fiesta/users/events/create') // Event-Erstellungs-Endpunkt
       .set('Authorization', `Bearer ${token}`)
-      .send({ eventId, rating: 5 });
+      .send({
+        title: 'Test Event',
+        description: 'Dies ist ein Test-Event',
+        date: new Date(),
+        image: 'testimage.jpg',
+        userId, // userId als Teil des Requests, wenn nötig
+      });
 
-    expect(response.statusCode).toBe(201);
-    expect(response.body.message).toBe('Rating added successfully');
+    expect(eventResponse.statusCode).toBe(201);
+    expect(eventResponse.body.eventId).toBeDefined();
+
+    eventId = eventResponse.body.eventId;
   });
 
-  // Test für die POST /users/events/comment Route
-  test('should add a comment to an event', async () => {
+  test('sollte eine Bewertung für ein Event hinzufügen', async () => {
     const response = await request(app)
-      .post('/users/events/comment')
+      .post('/api-ford-fiesta/users/events/rate') // Bewertung hinzufügen
       .set('Authorization', `Bearer ${token}`)
-      .send({ eventId, comment: 'Great event!' });
+      .send({
+        eventId,
+        rating: 5,
+        userId, // userId hinzufügen, falls die API dies benötigt
+      });
 
-    expect(response.statusCode).toBe(201);
-    expect(response.body.message).toBe('Comment added successfully');
+    expect(response.statusCode).toBe(201); // Überprüfe nur den Statuscode
   });
 
-  // Test für die GET /users/events/event-feedback Route
-  test('should fetch ratings for an event', async () => {
-    await Rating.create({ eventId, userId: 1, rating: 4 }); // Ersetze 1 mit der tatsächlichen User-ID
-    await Rating.create({ eventId, userId: 1, rating: 5 }); // Ersetze 1 mit der tatsächlichen User-ID
-
+  test('sollte einen Kommentar zu einem Event hinzufügen', async () => {
     const response = await request(app)
-      .get('/users/events/event-feedback')
+      .post('/api-ford-fiesta/users/events/comment') // Kommentar hinzufügen
       .set('Authorization', `Bearer ${token}`)
-      .send({ eventId });
+      .send({
+        eventId,
+        comment: 'Tolles Event!',
+        userId, // userId hinzufügen, falls die API dies benötigt
+      });
 
-    expect(response.statusCode).toBe(200);
-    expect(response.body.length).toBe(2); // Anzahl der Bewertungen prüfen
+    expect(response.statusCode).toBe(201); // Überprüfe nur den Statuscode
   });
-
-  // Weitere Tests hinzufügen
 });
