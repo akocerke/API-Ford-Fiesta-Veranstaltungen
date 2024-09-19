@@ -91,6 +91,61 @@ UsersRouter.get('/profile', async (req, res) => {
   }
 });
 
+// PUT /users/profile - Profile Daten ändern [username, email] des angemeldeten Benutzers
+UsersRouter.put('/profile', async (req, res) => {
+  const userId = req.user.id; // Extrahiere die User-ID aus dem Token
+  const { username, email } = req.body;
+
+  try {
+    // Datenbank-Abfrage für den aktuellen Benutzer
+    const user = await User.findByPk(userId);
+
+    if (!user) {
+      logger.info(`PUT /users/profile - UserID: ${userId} not found`);
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Überprüfen, ob der neue Benutzername bereits verwendet wird
+    const existingUserWithUsername = await User.findOne({
+      where: {
+        username: username,
+      },
+    });
+
+    if (existingUserWithUsername && existingUserWithUsername.id !== userId) {
+      return res.status(400).json({ message: 'Username is already taken' });
+    }
+
+    // Überprüfen, ob die neue E-Mail-Adresse bereits verwendet wird
+    const existingUserWithEmail = await User.findOne({
+      where: {
+        email: email,
+      },
+    });
+
+    if (existingUserWithEmail && existingUserWithEmail.id !== userId) {
+      return res.status(400).json({ message: 'Email is already taken' });
+    }
+
+    // Benutzer-Daten aktualisieren
+    user.username = username;
+    user.email = email;
+    await user.save();
+
+    // Erfolgreiche Aktualisierung protokollieren
+    logger.info(
+      `PUT /users/profile - UserID: ${userId} profile updated successfully`
+    );
+    res.json({ message: 'Profile updated successfully' });
+  } catch (error) {
+    // Fehler protokollieren
+    logger.error(
+      `PUT /users/profile - Error for UserID ${userId}: ${error.message}`
+    );
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
 // GET /users/events - Abrufen aller Events des angemeldeten Benutzers✅
 UsersRouter.get('/events', async (req, res) => {
   const userId = req.user.id; // Extrahiere die User-ID aus dem Token

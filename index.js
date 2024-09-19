@@ -14,8 +14,8 @@ const port = process.env.PORT || 5050;
 
 // Rate-Limiter-Konfiguration
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 Minuten
-  max: 100, // Limit jeder IP auf 100 Anfragen pro Fenster
+  windowMs: 60 * 60 * 1000, // 60 Minuten
+  max: 1000, // Limit jeder IP auf 1000 Anfragen pro Fenster
   message:
     'Zu viele Anfragen von dieser IP-Adresse. Bitte versuche es später erneut.',
   headers: true, // Optional: setze Rate Limit-Header in den Antworten
