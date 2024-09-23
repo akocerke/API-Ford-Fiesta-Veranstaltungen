@@ -402,7 +402,7 @@ UsersRouter.post('/events/comment', async (req, res) => {
       );
       return res
         .status(400)
-        .json({ message: 'You have already commented on this event' });
+        .json({ message: 'Du hast dieses Event bereits kommentiert' });
     }
 
     // Erstellen eines neuen Kommentars in der Datenbank
@@ -418,7 +418,7 @@ UsersRouter.post('/events/comment', async (req, res) => {
     );
 
     // Sende eine Bestätigung der Kommentar-Erstellung als Antwort zurück
-    res.status(201).json({ message: 'Comment added successfully' });
+    res.status(201).json({ message: 'Kommentar erfolgreich hinzugefügt' });
   } catch (error) {
     // Protokolliere den Fehler und sende eine Antwort
     logger.error(
