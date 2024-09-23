@@ -343,7 +343,7 @@ UsersRouter.post('/events/rate', async (req, res) => {
       );
       return res
         .status(400)
-        .json({ message: 'You have already rated this event' });
+        .json({ message: 'Du hast diese Veranstaltung bereits bewertet' });
     }
 
     // Erstellen einer neuen Bewertung in der Datenbank
@@ -359,7 +359,7 @@ UsersRouter.post('/events/rate', async (req, res) => {
     );
 
     // Sende eine Bestätigung der Bewertung als Antwort zurück
-    res.status(201).json({ message: 'Rating added successfully' });
+    res.status(201).json({ message: 'Bewertung erfolgreich hinzugefügt' });
   } catch (error) {
     // Protokolliere den Fehler und sende eine Antwort
     logger.error(
