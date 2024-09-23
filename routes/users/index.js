@@ -8,6 +8,7 @@ const Rating = require('../../database/models/Rating');
 const logger = require('../../services/logger');
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3({ region: 'eu-central-1' });
+const bcrypt = require('bcryptjs');
 
 const bucketName = 'fordfiestabucket';
 
@@ -493,6 +494,48 @@ UsersRouter.get('/events/get-url', async (req, res) => {
   } catch (error) {
     logger.error(`GET /users/events/get-url - Error: ${error.message}`);
     res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+// POST /users/password - Passwort ändern
+UsersRouter.post('/password', async (req, res) => {
+  try {
+    const userId = req.user.id; // Benutzer-ID aus dem Token
+    const { oldPassword, newPassword } = req.body;
+
+    if (!oldPassword || !newPassword) {
+      logger.warn(`UserId: ${userId} - Fehlende Passwortinformationen`);
+      return res
+        .status(400)
+        .json({ message: 'Altes und neues Passwort müssen angegeben werden' });
+    }
+
+    // Benutzer anhand der userId suchen
+    const user = await User.findOne({ where: { id: userId } }); // Sicherstellen, dass die richtige ID verwendet wird
+    if (!user) {
+      logger.warn(`UserId: ${userId} - Benutzer nicht gefunden`);
+      return res.status(404).json({ message: 'Benutzer nicht gefunden' });
+    }
+
+    // Vergleiche das alte Passwort
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      logger.warn(`UserId: ${userId} - Altes Passwort ist falsch`);
+      return res.status(400).json({ message: 'Das alte Passwort ist falsch' });
+    }
+
+    // Hash das neue Passwort
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedNewPassword;
+    await user.save();
+
+    logger.info(`UserId: ${userId} - Passwort erfolgreich geändert`);
+    return res.status(200).json({ message: 'Passwort erfolgreich geändert' });
+  } catch (error) {
+    logger.error(
+      `UserId: ${req.user.id} - Fehler beim Ändern des Passworts: ${error.message}`
+    );
+    return res.status(500).json({ message: 'Serverfehler' });
   }
 });
 
