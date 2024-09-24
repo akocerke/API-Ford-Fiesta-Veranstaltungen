@@ -9,7 +9,7 @@ const logger = require('../../services/logger');
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3({ region: 'eu-central-1' });
 const bcrypt = require('bcryptjs');
-
+const { v4: uuidv4 } = require('uuid');
 const bucketName = 'fordfiestabucket';
 
 // GET /users/dashboard - Gibt eine Übersicht von Events, Ratings, Comments und Violations des angemeldeten Benutzers zurück.✅
@@ -177,37 +177,55 @@ UsersRouter.get('/events', async (req, res) => {
 
 // POST /users/events/create - Erstellen eines neuen Events durch den Benutzer✅
 UsersRouter.post('/events/create', async (req, res) => {
-  const userId = req.user.id; // Extrahiere die User-ID aus dem Token
-  const { title, description, date, image } = req.body;
+  const userId = req.user.id;
+  const { title, description, date, imageFileName, imageFileType } = req.body;
 
-  // Überprüfen, ob alle erforderlichen Felder bereitgestellt wurden
-  if (!title || !description || !date || !image) {
-    return res.status(400).json({ message: 'Missing required fields' });
+  if (!title || !description || !date || !imageFileName || !imageFileType) {
+    return res
+      .status(400)
+      .json({ success: false, message: 'Missing required fields' });
   }
 
+  const uniqueFileName = `${uuidv4()}-${imageFileName}`;
+  const params = {
+    Bucket: bucketName,
+    Key: uniqueFileName,
+    Expires: 60 * 5,
+    ContentType: imageFileType,
+  };
+
   try {
-    // Erstellen eines neuen Events in der Datenbank
+    const uploadUrl = s3.getSignedUrl('putObject', params);
+
     const newEvent = await Event.create({
       userId,
       title,
       description,
       date,
-      image,
+      image: uniqueFileName,
     });
 
-    // Logge die Erstellung des neuen Events
     logger.info(
       `POST /users/events/create - UserID: ${userId} - Created event with ID ${newEvent.id}`
     );
 
-    // Sende die ID des neu erstellten Events als Antwort zurück
-    res.status(201).json({ eventId: newEvent.id });
+    // Erfolgreiche Antwort mit Event-ID und Upload-URL
+    return res.status(201).json({
+      success: true,
+      message: 'Event created successfully',
+      eventId: newEvent.id,
+      uploadUrl,
+    });
   } catch (error) {
-    // Protokolliere den Fehler und sende eine Antwort
     logger.error(
       `POST /users/events/create - Error for UserID ${userId}: ${error.message}`
     );
-    res.status(500).json({ message: 'Server Error' });
+
+    // Fehlermeldung zurücksenden
+    return res.status(500).json({
+      success: false,
+      message: 'Server Error: Unable to create event',
+    });
   }
 });
 
