@@ -8,9 +8,9 @@ const Rating = require('../../database/models/Rating');
 const logger = require('../../services/logger');
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3({ region: 'eu-central-1' });
+const bucketName = 'fordfiestabucket';
 const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
-const bucketName = 'fordfiestabucket';
 
 // GET /users/dashboard - Gibt eine Übersicht von Events, Ratings, Comments und Violations des angemeldeten Benutzers zurück.✅
 UsersRouter.get('/dashboard', async (req, res) => {
@@ -485,32 +485,6 @@ UsersRouter.get('/events/event-feedback', async (req, res) => {
     logger.error(
       `GET /users/events/event-feedback - Error for UserID ${userId} for EventID ${eventId}: ${error.message}`
     );
-    res.status(500).json({ message: 'Server Error' });
-  }
-});
-
-// GET /users/events/upload-url - abfragen der ImageURL
-UsersRouter.get('/events/get-url', async (req, res) => {
-  const { fileName } = req.body; // Dateiname aus dem Body abfragen
-
-  // Überprüfen, ob der Dateiname angegeben wurde
-  if (!fileName) {
-    return res.status(400).json({ message: 'fileName is required' });
-  }
-
-  const params = {
-    Bucket: bucketName,
-    Key: fileName,
-  };
-
-  try {
-    const url = s3.getSignedUrl('getObject', params);
-    logger.info(
-      `GET /users/events/get-url - Retrieved URL for file: ${fileName}`
-    );
-    res.json({ url });
-  } catch (error) {
-    logger.error(`GET /users/events/get-url - Error: ${error.message}`);
     res.status(500).json({ message: 'Server Error' });
   }
 });
