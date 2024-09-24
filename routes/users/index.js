@@ -232,18 +232,22 @@ UsersRouter.post('/events/create', async (req, res) => {
 // PUT /users/events/update - Bearbeiten eines Events, das der Benutzer erstellt hat✅
 UsersRouter.put('/events/update', async (req, res) => {
   const userId = req.user.id; // Extrahiere die User-ID aus dem Token
-  const { id, title, description, date, image } = req.body; // Die ID des zu bearbeitenden Events und die neuen Daten
+  const { id, title, description, date, imageFileName, imageFileType } =
+    req.body; // Die ID des zu bearbeitenden Events und die neuen Daten
 
   // Überprüfen, ob die ID des Events bereitgestellt wurde
   if (!id) {
-    return res.status(400).json({ message: 'Event ID is required' });
-  }
-
-  // Überprüfen, ob alle erforderlichen Felder bereitgestellt wurden
-  if (!title && !description && !date && !image) {
     return res
       .status(400)
-      .json({ message: 'At least one field to update is required' });
+      .json({ success: false, message: 'Event ID is required' });
+  }
+
+  // Überprüfen, ob mindestens eines der erforderlichen Felder bereitgestellt wurde
+  if (!title && !description && !date && !imageFileName && !imageFileType) {
+    return res.status(400).json({
+      success: false,
+      message: 'At least one field to update is required',
+    });
   }
 
   try {
@@ -260,9 +264,27 @@ UsersRouter.put('/events/update', async (req, res) => {
       logger.info(
         `PUT /users/events/update - Event with ID ${id} not found or UserID ${userId} is not the creator`
       );
-      return res
-        .status(404)
-        .json({ message: 'Event not found or User is not the creator' });
+      return res.status(404).json({
+        success: false,
+        message: 'Event not found or User is not the creator',
+      });
+    }
+
+    // Wenn ein neues Bild hochgeladen werden soll, erstelle die Upload-URL
+    let uploadUrl;
+    if (imageFileName && imageFileType) {
+      const uniqueFileName = `${uuidv4()}-${imageFileName}`;
+      const params = {
+        Bucket: bucketName,
+        Key: uniqueFileName,
+        Expires: 60 * 5,
+        ContentType: imageFileType,
+      };
+
+      uploadUrl = s3.getSignedUrl('putObject', params);
+
+      // Aktualisieren des Events mit dem neuen Bild
+      event.image = uniqueFileName; // Bildname aktualisieren
     }
 
     // Aktualisieren des Events mit den bereitgestellten Daten
@@ -270,7 +292,6 @@ UsersRouter.put('/events/update', async (req, res) => {
       title: title || event.title,
       description: description || event.description,
       date: date || event.date,
-      image: image || event.image,
     });
 
     // Logge die Aktualisierung des Events
@@ -279,13 +300,17 @@ UsersRouter.put('/events/update', async (req, res) => {
     );
 
     // Sende eine Bestätigung der Aktualisierung als Antwort zurück
-    res.json({ message: 'Event updated successfully' });
+    return res.status(200).json({
+      success: true,
+      message: 'Events erfolgreich aktualisiert',
+      uploadUrl, // Sende die Upload-URL zurück, falls vorhanden
+    });
   } catch (error) {
     // Protokolliere den Fehler und sende eine Antwort
     logger.error(
       `PUT /users/events/update - Error for UserID ${userId}: ${error.message}`
     );
-    res.status(500).json({ message: 'Server Error' });
+    return res.status(500).json({ success: false, message: 'Server Error' });
   }
 });
 
