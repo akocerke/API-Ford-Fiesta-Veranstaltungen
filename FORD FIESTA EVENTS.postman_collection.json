@@ -14,7 +14,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"username\": \"testuser6\",\r\n  \"email\": \"testuser6@example.com\",\r\n  \"password\": \"Test1234!\"\r\n}\r\n",
+					"raw": "{\r\n  \"username\": \"testuser7\",\r\n  \"email\": \"testuser7@example.com\",\r\n  \"password\": \"Test1234!\"\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -44,7 +44,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"email\": \"testuser6@example.com\",\r\n  \"password\": \"Test1234!\"\r\n}",
+					"raw": "{\r\n  \"email\": \"testuser7@example.com\",\r\n  \"password\": \"Test1234!\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -571,7 +571,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzI2NjU1MTk2LCJleHAiOjE3MjY2NTg3OTZ9.E9taFU6npArudpw7B5nqogp1IzgBC1a8JR-hgiR-mmE",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcyNzE4MzkxNCwiZXhwIjoxNzI3MTg3NTE0fQ.WxPRHmFSGvepy7u2UHMgdjgrdp-Ay4IoOittd4Hmd94",
 							"type": "string"
 						}
 					]
@@ -646,7 +646,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzI2ODI0Nzk3LCJleHAiOjE3MjY4MjgzOTd9.wSXZwyEAgOKrIkUDTEAThCLoYVniZNsqNTdXdcX4YLg",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcyNzE4Nzk5MywiZXhwIjoxNzI3MTkxNTkzfQ.IAsLwavmWSKBNLjH_php1-0aaAhlrhI470J9TgiuEcs",
 							"type": "string"
 						}
 					]
@@ -655,7 +655,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"title\": \"Test Event 4\",\r\n  \"description\": \"Test\",\r\n  \"date\": \"2024-10-10T10:00:00Z\",\r\n  \"image\": \"https://www.evanshalshaw.com/-/media/evanshalshaw/blog/history-of-the-ford-fiesta/ford-fiesta-mk5-exterior-1280x720px.ashx\"\r\n}\r\n",
+					"raw": "{\r\n  \"title\": \"Test Event 6\",\r\n  \"description\": \"This is a test event\",\r\n  \"date\": \"2024-12-25\",\r\n  \"imageFileName\": \"test-image.jpg\",\r\n  \"imageFileType\": \"image/jpeg\"\r\n}\r\n\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -687,7 +687,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzI1OTYyMDk1LCJleHAiOjE3MjU5NjU2OTV9.7Jh31ijZexxVmiGDQvNvyH9HcvsxLPamOvCZtMPYmGY",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcyNzE4Nzk5MywiZXhwIjoxNzI3MTkxNTkzfQ.IAsLwavmWSKBNLjH_php1-0aaAhlrhI470J9TgiuEcs",
 							"type": "string"
 						}
 					]
@@ -696,7 +696,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\": 32,\r\n    \"title\": \"Neuer Ford Fiesta Event\",\r\n    \"description\": \"Dieses Event ist für alle Ford Fiesta Besitzer des Baujahres 2001–2008.\",\r\n    \"date\": \"2024-12-15T12:00:00\",\r\n    \"image\": \"image_url.jpg\"\r\n}\r\n",
+					"raw": "{\r\n    \"id\": 15,\r\n    \"title\": \"Test Event 67\",\r\n    \"description\": \"This is a test event\",\r\n    \"date\": \"2024-12-25\",\r\n    \"imageFileName\": \"test-image.jpg\",\r\n    \"imageFileType\": \"image/jpeg\"\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -844,71 +844,6 @@
 			"response": []
 		},
 		{
-			"name": "/events/all",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:5050/api-ford-fiesta/events/all",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5050",
-					"path": [
-						"api-ford-fiesta",
-						"events",
-						"all"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/users/events/get-url",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzI2ODQwMDMxLCJleHAiOjE3MjY4NDM2MzF9.h7ZMao5Y-VptgNlPEUkj-yzEMH3xZP56kjRxTts3wjI",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"fileName\": \"it-2.jpg\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:5050/api-ford-fiesta/users/events/get-url",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5050",
-					"path": [
-						"api-ford-fiesta",
-						"users",
-						"events",
-						"get-url"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "/users/password",
 			"request": {
 				"auth": {
@@ -943,6 +878,57 @@
 						"api-ford-fiesta",
 						"users",
 						"password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/events/all",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5050/api-ford-fiesta/events/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5050",
+					"path": [
+						"api-ford-fiesta",
+						"events",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/events/get-url",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"fileName\": \"40cbfbd0-dbd3-4f63-9e62-fc7f4d41bf69-ford-fiesta-mk5.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5050/api-ford-fiesta/events/get-url",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5050",
+					"path": [
+						"api-ford-fiesta",
+						"events",
+						"get-url"
 					]
 				}
 			},
