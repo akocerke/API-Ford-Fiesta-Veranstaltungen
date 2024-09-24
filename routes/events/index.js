@@ -5,7 +5,9 @@ const Rating = require('../../database/models/Rating'); // Rating importieren
 const Comment = require('../../database/models/Comment'); // Comment importieren
 const User = require('../../database/models/User'); // User importieren
 const logger = require('../../services/logger');
-
+const AWS = require('aws-sdk');
+const s3 = new AWS.S3({ region: 'eu-central-1' });
+const bucketName = 'fordfiestabucket';
 // GET /events/all
 EventRouter.get('/all', async (req, res) => {
   try {
@@ -53,6 +55,30 @@ EventRouter.get('/all', async (req, res) => {
   } catch (error) {
     logger.error('Fehler beim Abrufen der Events:', error);
     res.status(500).json({ message: 'Fehler beim Abrufen der Events' });
+  }
+});
+
+// POST /events/get-url - Abfragen der Bild-URL
+EventRouter.post('/get-url', async (req, res) => {
+  const { fileName } = req.body; // Dateiname aus dem Body abfragen
+
+  // Überprüfen, ob der Dateiname angegeben wurde
+  if (!fileName) {
+    return res.status(400).json({ message: 'fileName is required' });
+  }
+
+  const params = {
+    Bucket: bucketName,
+    Key: fileName,
+  };
+
+  try {
+    const url = s3.getSignedUrl('getObject', params);
+    logger.info(`POST /events/get-url - Retrieved URL for file: ${fileName}`);
+    res.json({ url });
+  } catch (error) {
+    logger.error(`POST /events/get-url - Error: ${error.message}`);
+    res.status(500).json({ message: 'Server Error' });
   }
 });
 
