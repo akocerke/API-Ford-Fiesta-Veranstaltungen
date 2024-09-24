@@ -212,7 +212,7 @@ UsersRouter.post('/events/create', async (req, res) => {
     // Erfolgreiche Antwort mit Event-ID und Upload-URL
     return res.status(201).json({
       success: true,
-      message: 'Event created successfully',
+      message: 'Event erfolgreich erstellt',
       eventId: newEvent.id,
       uploadUrl,
     });
