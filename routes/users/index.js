@@ -6,10 +6,10 @@ const Comment = require('../../database/models/Comment');
 const Violation = require('../../database/models/Violation');
 const Rating = require('../../database/models/Rating');
 const logger = require('../../services/logger');
+const bcrypt = require('bcryptjs');
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3({ region: 'eu-central-1' });
 const bucketName = 'fordfiestabucket';
-const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
 
 // GET /users/dashboard - Gibt eine Übersicht von Events, Ratings, Comments und Violations des angemeldeten Benutzers zurück.✅
@@ -229,18 +229,19 @@ UsersRouter.post('/events/create', async (req, res) => {
   }
 });
 
-// PUT /users/events/update - Bearbeiten eines Events, das der Benutzer erstellt hat✅
+// PUT /users/events/update - Bearbeiten eines Events
 UsersRouter.put('/events/update', async (req, res) => {
   const userId = req.user.id; // Extrahiere die User-ID aus dem Token
-  const { id, title, description, date, image } = req.body; // Die ID des zu bearbeitenden Events und die neuen Daten
+  const { id, title, description, date, imageFileName, imageFileType } =
+    req.body; // Die ID des zu bearbeitenden Events und die neuen Daten
 
   // Überprüfen, ob die ID des Events bereitgestellt wurde
   if (!id) {
     return res.status(400).json({ message: 'Event ID is required' });
   }
 
-  // Überprüfen, ob alle erforderlichen Felder bereitgestellt wurden
-  if (!title && !description && !date && !image) {
+  // Überprüfen, ob mindestens ein Feld zum Aktualisieren bereitgestellt wurde
+  if (!title && !description && !date && !imageFileName) {
     return res
       .status(400)
       .json({ message: 'At least one field to update is required' });
@@ -265,21 +266,63 @@ UsersRouter.put('/events/update', async (req, res) => {
         .json({ message: 'Event not found or User is not the creator' });
     }
 
-    // Aktualisieren des Events mit den bereitgestellten Daten
-    const updatedEvent = await event.update({
-      title: title || event.title,
-      description: description || event.description,
-      date: date || event.date,
-      image: image || event.image,
-    });
+    // Wenn ein neues Bild hochgeladen wird
+    let uniqueFileName = event.image; // Behalte den alten Bildnamen bei, falls kein neues Bild hochgeladen wird
 
-    // Logge die Aktualisierung des Events
-    logger.info(
-      `PUT /users/events/update - UserID: ${userId} - Updated event with ID ${updatedEvent.id}`
-    );
+    if (imageFileName && imageFileType) {
+      // Erstelle einen eindeutigen Dateinamen
+      uniqueFileName = `${uuidv4()}-${imageFileName}`;
+      const params = {
+        Bucket: bucketName,
+        Key: uniqueFileName,
+        Expires: 60 * 5,
+        ContentType: imageFileType,
+      };
 
-    // Sende eine Bestätigung der Aktualisierung als Antwort zurück
-    res.json({ message: 'Event updated successfully' });
+      // Erstelle eine signierte URL für den Upload
+      const uploadUrl = s3.getSignedUrl('putObject', params);
+
+      // Hier kannst du die Logik für den Upload des Bildes zu dieser URL hinzufügen,
+      // dies sollte auf der Client-Seite geschehen. Z.B. mit einem Fetch oder Axios-Call.
+
+      // Aktualisiere das Event in der Datenbank
+      await event.update({
+        title: title || event.title,
+        description: description || event.description,
+        date: date || event.date,
+        image: uniqueFileName, // aktualisiere den Bildnamen
+      });
+
+      // Logge die Aktualisierung des Events
+      logger.info(
+        `PUT /users/events/update - UserID: ${userId} - Updated event with ID ${event.id}`
+      );
+
+      // Sende eine Bestätigung der Aktualisierung als Antwort zurück
+      return res.json({
+        success: true,
+        message: 'Event updated successfully',
+        uploadUrl, // Sende die Upload-URL zurück, damit der Client das Bild hochladen kann
+      });
+    } else {
+      // Aktualisiere das Event ohne Bild
+      await event.update({
+        title: title || event.title,
+        description: description || event.description,
+        date: date || event.date,
+      });
+
+      // Logge die Aktualisierung des Events
+      logger.info(
+        `PUT /users/events/update - UserID: ${userId} - Updated event with ID ${event.id}`
+      );
+
+      // Sende eine Bestätigung der Aktualisierung als Antwort zurück
+      return res.json({
+        success: true,
+        message: 'Event updated successfully without image',
+      });
+    }
   } catch (error) {
     // Protokolliere den Fehler und sende eine Antwort
     logger.error(
