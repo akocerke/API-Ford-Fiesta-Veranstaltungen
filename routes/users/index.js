@@ -35,29 +35,32 @@ UsersRouter.get('/dashboard', async (req, res) => {
       `GET /users/dashboard - UserID: ${userId} angeforderte Dashboard-Daten. Events: ${events.length}, Ratings: ${ratings.length}, Comments: ${comments.length}, Violations: ${violations.length}`
     );
 
-    // Überprüfe, ob keine Daten gefunden wurden und logge dies entsprechend
-    if (
-      events.length === 0 &&
-      ratings.length === 0 &&
-      comments.length === 0 &&
-      violations.length === 0
-    ) {
-      logger.info(
-        `GET /users/dashboard - UserID: ${userId} hat keine Dashboard-Daten.`
-      );
-    }
+    // Teile die Verstöße in pending und resolved auf
+    const pendingViolations = violations.filter((v) => v.status === 'pending');
+    const resolvedViolations = violations.filter(
+      (v) => v.status === 'resolved'
+    );
 
     // Sende die Daten als Antwort zurück
     res.json({
-      events,
-      ratings,
-      comments,
-      violations,
+      events: events.length,
+      ratings: ratings.length,
+      comments: comments.length,
+      violations: {
+        total: violations.length,
+        pending: pendingViolations.length,
+        resolved: resolvedViolations.length,
+        pendingData: pendingViolations,
+        resolvedData: resolvedViolations,
+      },
+      eventsData: events,
+      ratingsData: ratings,
+      commentsData: comments,
     });
   } catch (error) {
     // Protokolliere den Fehler und sende eine Antwort
     logger.error(
-      `Error fetching dashboard data for user ${userId}: ${error.message}`
+      `GET /users/dashboard - Fehler beim Abrufen der Daten für Benutzer ${userId}: ${error.message}`
     );
     res.status(500).send('Server Error');
   }
