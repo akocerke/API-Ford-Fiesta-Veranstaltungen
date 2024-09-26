@@ -574,4 +574,51 @@ UsersRouter.post('/password', async (req, res) => {
   }
 });
 
+// POST /users/violations - Verstoß melden
+UsersRouter.post('/violations', async (req, res) => {
+  try {
+    // Extrahiere die Felder aus dem Request Body
+    const { eventId, reason, details } = req.body; // Wir erwarten eventId, reason und details
+
+    // Der Benutzer, der den Verstoß meldet (von der Authentifizierungsschicht bereitgestellt)
+    const reportedBy = req.user.id; // Die User-ID wird aus dem Authentifizierungstoken entnommen
+
+    // Validierung - Überprüfen, ob alle erforderlichen Felder ausgefüllt sind
+    if (!eventId || !reason) {
+      logger.info(
+        `POST /users/violations - Fehlende Felder, eventId oder reason fehlen für UserID ${reportedBy}`
+      );
+      return res
+        .status(400)
+        .json({ message: 'Bitte füllen Sie alle erforderlichen Felder aus.' });
+    }
+
+    // Füge den neuen Verstoß in die Datenbank ein
+    const newViolation = await Violation.create({
+      eventId: eventId,
+      reportedBy: reportedBy,
+      reason: reason,
+      details: details || null, // Das details-Feld kann null sein
+      status: 'pending', // Status automatisch auf 'pending' setzen
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+
+    // Erfolgreiche Antwort und Log zurückgeben
+    logger.info(
+      `POST /users/violations - Verstoß gemeldet für EventID ${eventId} durch UserID ${reportedBy}`
+    );
+    res.status(201).json({
+      message: 'Verstoß erfolgreich gemeldet.',
+      violation: newViolation,
+    });
+  } catch (error) {
+    // Fehlerbehandlung und Logging
+    logger.error(
+      `POST /users/violations - Fehler beim Melden des Verstoßes durch UserID ${req.user.id}: ${error.message}`
+    );
+    res.status(500).json({ message: 'Interner Serverfehler.' });
+  }
+});
+
 module.exports = { UsersRouter };
