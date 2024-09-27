@@ -23,7 +23,8 @@ AdminsRouter.get('/admins', async (req, res) => {
 // GET /admins/users - Alle User abrufen✅
 AdminsRouter.get('/users', async (req, res) => {
   try {
-    const users = await User.findAll({ where: { role: 'user' } });
+    // Alle Benutzer abrufen, egal welche Rolle
+    const users = await User.findAll();
     logger.info(`GET /admins/users - ${users.length} users found`);
     res.json(users);
   } catch (err) {
@@ -50,7 +51,7 @@ AdminsRouter.delete('/users/delete', async (req, res) => {
     }
 
     logger.info(`DELETE /admins/users/delete - User with ID ${id} deleted`);
-    res.status(200).json({ message: 'User deleted' });
+    res.status(200).json({ message: 'Benutzer gelöscht' });
   } catch (err) {
     logger.error(`DELETE /admins/users/delete - Error: ${err.message}`);
     res.status(500).json({ message: err.message });
@@ -71,7 +72,7 @@ AdminsRouter.put('/users/role', async (req, res) => {
     logger.info(
       `PUT /admins/users/role - Role updated for user ${userId} to ${role}`
     );
-    res.status(200).json({ message: 'User role updated' });
+    res.status(200).json({ message: 'Benutzer Rolle updated' });
   } catch (err) {
     logger.error(`PUT /admins/users/role - Error: ${err.message}`);
     res.status(500).json({ message: err.message });
@@ -147,7 +148,7 @@ AdminsRouter.delete('/comments/delete', async (req, res) => {
     logger.info(
       `DELETE /admins/comments/delete - Comment with ID ${id} deleted`
     );
-    res.status(200).json({ message: 'Comment deleted' });
+    res.status(200).json({ message: 'Kommentar gelöscht' });
   } catch (err) {
     logger.error(`DELETE /admins/comments/delete - Error: ${err.message}`);
     res.status(500).json({ message: err.message });
