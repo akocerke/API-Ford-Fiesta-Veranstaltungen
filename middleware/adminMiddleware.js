@@ -15,9 +15,7 @@ const adminMiddleware = (req, res, next) => {
     return res.status(401).json({ message: 'Invalid or expired token' });
   }
 
-  // Logge den decodierten Token-Inhalt
   logger.info('Decoded token:', decoded);
-
   req.user = decoded;
 
   // Überprüfe die Rolle des Benutzers
