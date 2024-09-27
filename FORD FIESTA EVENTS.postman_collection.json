@@ -106,7 +106,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI1ODg4OTExLCJleHAiOjE3MjU4OTI1MTF9.Wt-kCglJ22dMjU-JarIB6awjwOfl1ypvqtDJwkpPmQM",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcyNzI2NTM2NywiZXhwIjoxNzI3MjY4OTY3fQ.rgtwHacUrwLiMYKr9vHNIwyzCehb5xaBBIKH0fc9Nvk",
 							"type": "string"
 						}
 					]
@@ -131,31 +131,19 @@
 		},
 		{
 			"name": "/admins/admins",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTgsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzI2NTYzMTg3LCJleHAiOjE3MjY1NjY3ODd9.6Twoiz_HFkRhkPxQAFnVqbZ79Xi_3VE17QyLfhNsFwM",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcyNzI0MjY4NCwiZXhwIjoxNzI3MjQ2Mjg0fQ.oRydUlafHod_mC8JUNmMj6PP_VtW3_Nx0CMTwk3ewYk",
 							"type": "string"
 						}
 					]
 				},
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
 					"raw": "http://localhost:5050/api-ford-fiesta/admins/admins",
 					"protocol": "http",
@@ -180,7 +168,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI1ODc5MzE5LCJleHAiOjE3MjU4ODI5MTl9.fh6JGFmeP4lqnj9fyTnM3gI2XlSSnNBg9QwzkbEHYeg",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcyNzQzMTQxMiwiZXhwIjoxNzI3NDM1MDEyfQ.jqT5B2S3RZbN6fW0zeBZHZrsK7YQGQbnBrtmwJxMiwY",
 							"type": "string"
 						}
 					]
@@ -211,7 +199,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI1NjI1ODg5LCJleHAiOjE3MjU2Mjk0ODl9.5sEcxlz0DEJ0CixxF7MTn_gOXMqZpF_BUmrRC1Fm5aE",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcyNzI2NTM2NywiZXhwIjoxNzI3MjY4OTY3fQ.rgtwHacUrwLiMYKr9vHNIwyzCehb5xaBBIKH0fc9Nvk",
 							"type": "string"
 						}
 					]
@@ -242,7 +230,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI1NjI1Njc3LCJleHAiOjE3MjU2MjkyNzd9.ndGLsqngQJQ808kvG1DOrw4iRasXcZAwh1rIDcQfqZA",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcyNzQyNTA2MCwiZXhwIjoxNzI3NDI4NjYwfQ.9oHpyfvmVdb5JcjM6SeEBBkGv-RDq7lzKr3HgR6dGpY",
 							"type": "string"
 						}
 					]
@@ -297,47 +285,6 @@
 			"response": []
 		},
 		{
-			"name": "/admins/users/role",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI1ODgzMzg1LCJleHAiOjE3MjU4ODY5ODV9.0iqSMtTv9oHnjBKjBtQjvynXIarbcOyYMod598aueXk",
-							"type": "string"
-						}
-					]
-				},
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"userId\": 4,\r\n  \"role\": \"admin\"\r\n}\r\n",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:5050/api-ford-fiesta/admins/users/role",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5050",
-					"path": [
-						"api-ford-fiesta",
-						"admins",
-						"users",
-						"role"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "/admins/violations/status",
 			"request": {
 				"auth": {
@@ -373,6 +320,47 @@
 						"admins",
 						"violations",
 						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/admins/users/role",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI1ODgzMzg1LCJleHAiOjE3MjU4ODY5ODV9.0iqSMtTv9oHnjBKjBtQjvynXIarbcOyYMod598aueXk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"userId\": 4,\r\n  \"role\": \"admin\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5050/api-ford-fiesta/admins/users/role",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5050",
+					"path": [
+						"api-ford-fiesta",
+						"admins",
+						"users",
+						"role"
 					]
 				}
 			},
@@ -427,7 +415,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI1ODg4OTExLCJleHAiOjE3MjU4OTI1MTF9.Wt-kCglJ22dMjU-JarIB6awjwOfl1ypvqtDJwkpPmQM",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcyNzI2OTIzMSwiZXhwIjoxNzI3MjcyODMxfQ.EMSOtPBPXPAbJzSOzf7EfLnVTybOBQLpBVrTd8iXqtk",
 							"type": "string"
 						}
 					]
@@ -509,7 +497,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTksInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzI2NjYwNzMyLCJleHAiOjE3MjY2NjQzMzJ9.4H3pQpmUJSW7XD67SXgN3_PWH9Hi5N7ql3IHh_WrSk0",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzI3MzM0ODEwLCJleHAiOjE3MjczMzg0MTB9.gXZAugnLjnddR_0mg5dn5fV5TV_2wZlyHJpFMzpN1ZY",
 							"type": "string"
 						}
 					]
@@ -540,7 +528,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzI1OTU4Mjc2LCJleHAiOjE3MjU5NjE4NzZ9.xJpoplH0vkfYpJawLvc6U5QWXl55mm2UYxwq18gtroc",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzI3MzQxMDQyLCJleHAiOjE3MjczNDQ2NDJ9._w2GpcKMqjtsD2p5-NrHMB1UwJ6F9kXfyiotl1ap5dw",
 							"type": "string"
 						}
 					]
@@ -674,6 +662,46 @@
 						"users",
 						"events",
 						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/users/violations",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzI3MzMxMjM4LCJleHAiOjE3MjczMzQ4Mzh9.T_igvy8gJdgF6o112ewYcko2F5VfxKtbcbV8djsBRo8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"eventId\": 41,\r\n  \"reason\": \"Inappropriate content\",\r\n  \"details\": \"This event contains offensive language.\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5050/api-ford-fiesta/users/violations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5050",
+					"path": [
+						"api-ford-fiesta",
+						"users",
+						"violations"
 					]
 				}
 			},
