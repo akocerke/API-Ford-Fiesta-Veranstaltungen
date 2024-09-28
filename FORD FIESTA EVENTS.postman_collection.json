@@ -44,7 +44,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"email\": \"testuser7@example.com\",\r\n  \"password\": \"Test1234!\"\r\n}",
+					"raw": "{\r\n  \"email\": \"testuser8@example.com\",\r\n  \"password\": \"Test12345!\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -552,6 +552,46 @@
 			"response": []
 		},
 		{
+			"name": "/users/profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzI3NTA0NDExLCJleHAiOjE3Mjc1MDgwMTF9.EHYqUk6zCFgdIlsn3FivojA4yqI7i-d48vlef_AKf0w",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"testuser5\",\r\n    \"email\":\"testuser8@example.com\"\r\n    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5050/api-ford-fiesta/users/profile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5050",
+					"path": [
+						"api-ford-fiesta",
+						"users",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "/users/events",
 			"request": {
 				"auth": {
@@ -593,7 +633,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTgsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzI2NTczNTkzLCJleHAiOjE3MjY1NzcxOTN9.cjFG3mzMZZbsWo80SHnmb6TtHablRvlo0v7SxepLhtA",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzI3NTAyMDIzLCJleHAiOjE3Mjc1MDU2MjN9.Tm1hUw9gakQ-BOwTL-mGLyO9YJipuutFW5Rux5jFisY",
 							"type": "string"
 						}
 					]
@@ -602,7 +642,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"eventId\": 9\r\n}\r\n",
+					"raw": "{\r\n  \"eventId\": 43\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"

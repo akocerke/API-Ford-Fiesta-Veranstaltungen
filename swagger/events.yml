@@ -1,0 +1,30 @@
+openapi: 3.0.0    
+paths:
+  /events/all:
+    get:
+      tags:
+        - Events
+      summary: Aufrufen aller Events
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /events/get-url:
+    post:
+      tags:
+        - Events
+      summary: Gibt die vorläufige URL für eine Datei im S3-Bucket zurück, basierend auf dem angegebenen Dateinamen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                fileName: 40cbfbd0-dbd3-4f63-9e62-fc7f4d41bf69-ford-fiesta-mk5.jpg
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  
