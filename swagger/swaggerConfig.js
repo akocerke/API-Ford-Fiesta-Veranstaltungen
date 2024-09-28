@@ -5,6 +5,8 @@ const path = require('path');
 // YAML-Dateien laden
 const swaggerAuth = YAML.load(path.join(__dirname, 'auth.yml'));
 const swaggerAdmin = YAML.load(path.join(__dirname, 'admins.yml'));
+const swaggerUser = YAML.load(path.join(__dirname, 'users.yml'));
+const swaggerEvent = YAML.load(path.join(__dirname, 'events.yml'));
 
 // Swagger-Dokumentation zusammenführen
 const swaggerDocs = {
@@ -32,6 +34,8 @@ const swaggerDocs = {
   paths: {
     ...swaggerAuth.paths,
     ...swaggerAdmin.paths,
+    ...swaggerUser.paths,
+    ...swaggerEvent.paths,
   },
 };
 
