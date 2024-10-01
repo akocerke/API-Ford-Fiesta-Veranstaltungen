@@ -12,18 +12,18 @@ describe('Benutzer-Routen', () => {
     const signupResponse = await request(app)
       .post('/api-ford-fiesta/auth/signup') // Registrierungs-Endpunkt
       .send({
-        username: 'testuser14',
-        email: 'testuser14@example.com',
+        username: 'testuser18',
+        email: 'testuser18@example.com',
         password: 'Test1234!',
       });
 
-    expect(signupResponse.statusCode).toBe(201); // Überprüfe nur den Statuscode
+    expect(signupResponse.statusCode).toBe(201); // Überprüfe den Statuscode der Registrierung
 
     // Login für den Testbenutzer
     const loginResponse = await request(app)
       .post('/api-ford-fiesta/auth/login') // Login-Endpunkt
       .send({
-        email: 'testuser14@example.com',
+        email: 'testuser18@example.com', // E-Mail des neu registrierten Benutzers
         password: 'Test1234!',
       });
 
@@ -38,20 +38,21 @@ describe('Benutzer-Routen', () => {
 
     // Erstelle ein Test-Event
     const eventResponse = await request(app)
-      .post('/api-ford-fiesta/users/events/create') // Event-Erstellungs-Endpunkt
+      .post('/api-ford-fiesta/users/events/create')
       .set('Authorization', `Bearer ${token}`)
       .send({
         title: 'Test Event',
         description: 'Dies ist ein Test-Event',
-        date: new Date(),
+        date: new Date().toISOString(), // Stelle sicher, dass das Datum korrekt formatiert ist
         image: 'testimage.jpg',
-        userId, // userId als Teil des Requests, wenn nötig
+        imageFileType: 'image/jpeg',
       });
 
+    // Überprüfe, ob das Event erfolgreich erstellt wurde
     expect(eventResponse.statusCode).toBe(201);
     expect(eventResponse.body.eventId).toBeDefined();
 
-    eventId = eventResponse.body.eventId;
+    eventId = eventResponse.body.eventId; // Speichere die eventId für spätere Tests
   });
 
   test('sollte eine Bewertung für ein Event hinzufügen', async () => {
@@ -64,7 +65,8 @@ describe('Benutzer-Routen', () => {
         userId, // userId hinzufügen, falls die API dies benötigt
       });
 
-    expect(response.statusCode).toBe(201); // Überprüfe nur den Statuscode
+    // Überprüfe, ob die Bewertung erfolgreich hinzugefügt wurde
+    expect(response.statusCode).toBe(201); // Statuscode 201 für erfolgreich
   });
 
   test('sollte einen Kommentar zu einem Event hinzufügen', async () => {
@@ -77,6 +79,7 @@ describe('Benutzer-Routen', () => {
         userId, // userId hinzufügen, falls die API dies benötigt
       });
 
-    expect(response.statusCode).toBe(201); // Überprüfe nur den Statuscode
+    // Überprüfe, ob der Kommentar erfolgreich hinzugefügt wurde
+    expect(response.statusCode).toBe(201); // Statuscode 201 für erfolgreich
   });
 });

@@ -8,7 +8,7 @@ beforeAll(async () => {
   const res = await request(app)
     .post('/api-ford-fiesta/auth/login') // Pfad zum Login-Endpunkt
     .send({
-      email: 'andrea@example.com',
+      email: 'testuser7@example.com',
       password: 'Test1234!',
     });
 
@@ -51,7 +51,7 @@ describe('GET /api-ford-fiesta/admins/dashboard - Zugriff als normaler User', ()
   // Vor den Tests: User-Token anfordern
   beforeAll(async () => {
     const res = await request(app).post('/api-ford-fiesta/auth/login').send({
-      email: 'testuser3@example.com', // USER ROLE !!!!
+      email: 'testuser14@example.com', // USER ROLE !!!!
       password: 'Test1234!',
     });
 
