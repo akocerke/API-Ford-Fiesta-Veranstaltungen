@@ -7,17 +7,20 @@ describe('Benutzer-Routen', () => {
   let eventId;
   let userId;
 
+  const uniqueSuffix = Date.now();
+  const testUser = {
+    username: `testuser${uniqueSuffix}`, // Eindeutiger Benutzername
+    email: `testuser${uniqueSuffix}@example.com`, // Eindeutige E-Mail
+    password: 'Test1234!',
+  };
   beforeAll(async () => {
+    // Benutzer registrieren
     // Benutzer registrieren
     const signupResponse = await request(app)
       .post('/api-ford-fiesta/auth/signup') // Registrierungs-Endpunkt
-      .send({
-        username: 'testuser18',
-        email: 'testuser18@example.com',
-        password: 'Test1234!',
-      });
+      .send(testUser); // Verwendung der eindeutigen Benutzerdaten
 
-    expect(signupResponse.statusCode).toBe(201); // Überprüfe den Statuscode der Registrierung
+    expect(signupResponse.statusCode).toBe(201);
 
     // Login für den Testbenutzer
     const loginResponse = await request(app)
@@ -36,16 +39,16 @@ describe('Benutzer-Routen', () => {
     const decoded = jwt.decode(token);
     userId = decoded.id;
 
-    // Erstelle ein Test-Event
+    // Erstelle ein Test-Event mit dem korrekten Payload
     const eventResponse = await request(app)
       .post('/api-ford-fiesta/users/events/create')
       .set('Authorization', `Bearer ${token}`)
       .send({
-        title: 'Test Event',
-        description: 'Dies ist ein Test-Event',
-        date: new Date().toISOString(), // Stelle sicher, dass das Datum korrekt formatiert ist
-        image: 'testimage.jpg',
-        imageFileType: 'image/jpeg',
+        title: 'Test Event 6',
+        description: 'This is a test event',
+        date: '2024-12-25', // Stellt sicher, dass das Datum im richtigen Format ist
+        imageFileName: 'test-image.jpg', // Benutze den richtigen Schlüssel
+        imageFileType: 'image/jpeg', // Benutze den richtigen Typ
       });
 
     // Überprüfe, ob das Event erfolgreich erstellt wurde
