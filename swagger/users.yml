@@ -5,8 +5,7 @@ paths:
       tags:
         - Benutzer
       summary:
-        Zusammenfassung aller Events, Bewertungen, Kommentare und gemeldeten Verstöße
-        gemeldeten Verstöße, Verstöße in Bearbeitung, Verstöße erledigt
+        Zusammenfassung aller Events, Bewertungen, Kommentare und gemeldeten Verstöße gemeldeten Verstöße, Verstöße in Bearbeitung, Verstöße erledigt
 
       security:
         - bearerAuth: []
