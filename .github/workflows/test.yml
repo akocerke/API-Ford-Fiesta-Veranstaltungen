@@ -55,10 +55,12 @@ jobs:
 
       - name: Wait for MySQL
         run: |
-            while ! mysqladmin ping -h"localhost" -u"${{ secrets.DB_USERNAME }}" -p"${{ secrets.DB_PASSWORD }}" --silent; do
+            export MYSQL_PWD="${{ secrets.DB_PASSWORD }}"
+            while ! mysqladmin ping -h"localhost" -u"${{ secrets.DB_USERNAME }}" --silent; do
               echo "Waiting for MySQL..."
               sleep 2
             done
+        
         
 
       - name: Setup Database with SQL script
