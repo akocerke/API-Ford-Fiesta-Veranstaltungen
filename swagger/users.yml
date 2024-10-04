@@ -1,11 +1,12 @@
-openapi: 3.0.0    
+openapi: 3.0.0
 paths:
   /users/dashboard:
     get:
       tags:
         - Benutzer
-      summary: Zusammenfassung aller Events, Bewertungen, Kommentare und gemeldeten Verstöße
-               gemeldeten Verstöße, Verstöße in Bearbeitung, Verstöße erledigt
+      summary:
+        Zusammenfassung aller Events, Bewertungen, Kommentare und gemeldeten Verstöße
+        gemeldeten Verstöße, Verstöße in Bearbeitung, Verstöße erledigt
 
       security:
         - bearerAuth: []
@@ -56,7 +57,7 @@ paths:
         '200':
           description: Successful response
           content:
-            application/json: {} 
+            application/json: {}
   /users/events/update:
     put:
       tags:
@@ -80,7 +81,7 @@ paths:
         '200':
           description: Successful response
           content:
-            application/json: {} 
+            application/json: {}
   /users/events/delete:
     delete:
       tags:
@@ -197,4 +198,3 @@ paths:
           description: Successful response
           content:
             application/json: {}
-  
