@@ -13,9 +13,20 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [21.7.1]
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: my_test_db
+          POSTGRES_USER: my_user
+          POSTGRES_PASSWORD: my_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U my_user"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Checkout code
@@ -24,12 +35,36 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 21.7.1
 
       - name: Install API dependencies
         run: npm install
-        working-directory: ./  # API-Ordner (falls die API im Wurzelverzeichnis ist, entferne "working-directory")
+        working-directory: ./  # Passe diesen Pfad an, falls notwendig
+
+      - name: Create .env.test.local
+        run: |
+          echo "PORT=${{ secrets.PORT }}" >> .env.test.local
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env.test.local
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env.test.local
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env.test.local
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env.test.local
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env.test.local
+          echo "LOG_LEVEL=${{ secrets.LOG_LEVEL }}" >> .env.test.local
+      
+
+
+      - name: Wait for PostgreSQL
+        run: |
+          while ! pg_isready -h localhost -p 5432 -U my_user; do
+            echo "Waiting for PostgreSQL..."
+            sleep 2
+          done
+
+      - name: Setup Database with SQL script
+        run: |
+          echo "Setting up the database..."
+          PGPASSWORD=my_password psql -h localhost -U my_user -d my_test_db -f db_script/test_eventmanagement.sql
 
       - name: Run Jest tests
         run: npm run test
-        working-directory: ./  # Passe diesen Pfad an, wenn notwendig
+        working-directory: ./  # Passe diesen Pfad an, falls notwendig
