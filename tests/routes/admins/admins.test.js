@@ -51,19 +51,19 @@ describe('GET /api-ford-fiesta/admins/dashboard - Zugriff als normaler User', ()
   // Vor den Tests: User-Token anfordern
   beforeAll(async () => {
     const res = await request(app).post('/api-ford-fiesta/auth/login').send({
-      email: 'testuser14@example.com', // USER ROLE !!!!
+      email: 'testuser18@example.com', // Ein Benutzer ohne Admin-Rechte
       password: 'Test1234!',
     });
 
-    userToken = res.body.token; // Speichere den Token
+    userToken = res.body.token; // Speichere den Token des normalen Benutzers
   });
 
   // Test: Zugriff eines normalen Benutzers auf das Admin-Dashboard
   test('sollte den Zugriff verweigern und Status 403 zurückgeben', async () => {
     const res = await request(app)
-      .get('/api-ford-fiesta/admins/dashboard') // Überprüfe den vollständigen Pfad
+      .get('/api-ford-fiesta/admins/dashboard') // Admin-Dashboard-Pfad
       .set('Authorization', `Bearer ${userToken}`) // Setze den User-Token in den Header
-      .expect(403); // Erwarte den Statuscode 403
+      .expect(403); // Erwarte den Statuscode 403 (Access Denied)
 
     // Überprüfe die Fehlermeldung
     expect(res.body.message).toBe('Access denied: Admin rights required');

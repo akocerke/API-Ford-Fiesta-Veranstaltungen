@@ -1,20 +1,18 @@
 const request = require('supertest');
 const app = require('../../../index'); // Pfad zu deiner Express-Anwendung
 const jwt = require('jsonwebtoken'); // Zum Dekodieren des Tokens
-
+console.log('hello from userstest', process.env.DB_NAME);
 describe('Benutzer-Routen', () => {
   let token;
   let eventId;
   let userId;
 
-  const uniqueSuffix = Date.now();
   const testUser = {
-    username: `testuser${uniqueSuffix}`, // Eindeutiger Benutzername
-    email: `testuser${uniqueSuffix}@example.com`, // Eindeutige E-Mail
+    username: 'testuser0', // Eindeutiger Benutzername
+    email: 'testuser0@example.com', // Eindeutige E-Mail
     password: 'Test1234!',
   };
   beforeAll(async () => {
-    // Benutzer registrieren
     // Benutzer registrieren
     const signupResponse = await request(app)
       .post('/api-ford-fiesta/auth/signup') // Registrierungs-Endpunkt
@@ -26,7 +24,7 @@ describe('Benutzer-Routen', () => {
     const loginResponse = await request(app)
       .post('/api-ford-fiesta/auth/login') // Login-Endpunkt
       .send({
-        email: 'testuser18@example.com', // E-Mail des neu registrierten Benutzers
+        email: 'testuser18@example.com',
         password: 'Test1234!',
       });
 

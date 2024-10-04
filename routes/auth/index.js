@@ -43,7 +43,7 @@ AuthRouter.post('/login', async (req, res) => {
     // Logge den erfolgreichen Login-Versuch
     logger.info(`Benutzer mit ID ${user.id} Login erfolgreich.`);
   } catch (error) {
-    logger.error('Fehler beim Login:', error.message);
+    logger.error('Fehler beim Login:', error);
     res.status(500).json({ message: 'Interner Serverfehler' });
   }
 });
@@ -86,7 +86,7 @@ AuthRouter.post('/signup', async (req, res) => {
       message: 'Benutzer erfolgreich registriert',
     });
   } catch (error) {
-    logger.error('Fehler bei der Registrierung:', error.message);
+    logger.error('Fehler bei der Registrierung:', error);
     res.status(500).json({ message: 'Interner Serverfehler' });
   }
 });
