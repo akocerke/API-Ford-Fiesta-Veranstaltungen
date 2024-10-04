@@ -63,7 +63,7 @@ jobs:
       - name: Setup Database with SQL script
         run: |
           echo "Setting up the database..."
-          PGPASSWORD=my_password psql -h localhost -U my_user -d my_test_db -f db_script/test_eventmanagement.sql
+          PGPASSWORD=my_password psql -h localhost -U my_user -d my_test_db -f db_script/test_veranstaltungskalender_ford_fiesta.sql
 
       - name: Run Jest tests
         run: npm run test
