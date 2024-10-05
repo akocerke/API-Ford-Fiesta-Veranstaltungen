@@ -39,7 +39,7 @@ jobs:
       - name: Create .env.test.local
         run: |
           echo "PORT=${{ secrets.PORT }}" >> .env.test.local
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env.test.local
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env.test.local # Hier das Secret verwenden
           echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env.test.local
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env.test.local
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env.test.local
@@ -48,7 +48,8 @@ jobs:
 
       - name: Wait for MySQL
         run: |
-          while ! mysqladmin ping -h "localhost" -u"${{ secrets.DB_USERNAME }}" -p"${{ secrets.DB_PASSWORD }}" --silent; do
+          export MYSQL_PWD="${{ secrets.DB_PASSWORD }}"
+          while ! mysqladmin ping -h "${{ secrets.DB_HOST }}" -u"${{ secrets.DB_USERNAME }}" --silent; do
             echo "Waiting for MySQL..."
             sleep 5
           done
@@ -56,7 +57,7 @@ jobs:
       - name: Setup Database with SQL script
         run: |
           echo "Setting up the database structure..."
-          mysql -h localhost -u"${{ secrets.DB_USERNAME }}" -p"${{ secrets.DB_PASSWORD }}" "${{ secrets.DB_NAME }}" < db_script/test_veranstaltungskalender_ford_fiesta.sql
+          mysql -h "${{ secrets.DB_HOST }}" -u"${{ secrets.DB_USERNAME }}" "${{ secrets.DB_NAME }}" < db_script/test_veranstaltungskalender_ford_fiesta.sql
 
       - name: Run Jest tests
         run: npm run test
