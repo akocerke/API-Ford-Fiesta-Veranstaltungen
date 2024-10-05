@@ -63,15 +63,5 @@ jobs:
               exit 1
             fi
 
-      - name: Setup Database
-        run: |
-          echo "Creating the database..."
-          mysql -h "localhost" -u"${{ secrets.DB_USERNAME }}" -p"${{ secrets.DB_PASSWORD }}" -e "CREATE DATABASE IF NOT EXISTS \`${{ secrets.DB_NAME }}\`;"
-
-      - name: Setup Database with SQL script
-        run: |
-          echo "Setting up the database structure..."
-          mysql -h "localhost" -u"${{ secrets.DB_USERNAME }}" -p"${{ secrets.DB_PASSWORD }}" "${{ secrets.DB_NAME }}" < db_script/test_veranstaltungskalender_ford_fiesta.sql
-
       - name: Run Jest tests
         run: npm run test
