@@ -20,6 +20,7 @@ jobs:
           MYSQL_DATABASE: ${{ secrets.DB_NAME }}
           MYSQL_USER: ${{ secrets.DB_USERNAME }}
           MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASSWORD }}  # Hier sicherstellen, dass ein Root-Passwort definiert ist
         ports:
           - 3306:3306
         options: >-
