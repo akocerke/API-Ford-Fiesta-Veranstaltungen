@@ -6,7 +6,9 @@ require('dotenv').config({
 require('../../index');
 const mysequelize = require('../../database/setup/database');
 const UserModel = require('../../database/models/User'); // Importiere dein User-Modell
-const UserTestdata = require('./UserTestdata'); // Importiere die Testdaten
+const EventModel = require('../../database/models/Event'); // Importiere dein Event-Modell
+const UserTestdata = require('./UserTestdata'); // Importiere die Testdaten für Benutzer
+const EventTestdata = require('./EventTestdata'); // Importiere die Testdaten für Events
 const bcrypt = require('bcryptjs'); // Bcrypt für das Hashing der Passwörter
 
 const initializeDatabase = async () => {
@@ -21,13 +23,13 @@ const initializeDatabase = async () => {
     await mysequelize.dropSchema('ratings');
     await mysequelize.dropSchema('events');
     await mysequelize.dropSchema('users');
-    console.log('Schema "users" wurde gelöscht.');
+    console.log('Schema "users" und "events" wurden gelöscht.');
 
     // Synchronisiere die Modelle (Tabellen erstellen)
     await mysequelize.sync({ force: true });
     console.log('Datenbankstruktur wurde neu erstellt.');
 
-    // Fülle die Datenbank mit Testdaten (Passwörter werden gehasht)
+    // Fülle die Datenbank mit Testdaten für Benutzer (Passwörter werden gehasht)
     const hashedUsers = UserTestdata.map((user) => ({
       ...user,
       password: bcrypt.hashSync(user.password, 10), // Passwort hashen
@@ -36,6 +38,12 @@ const initializeDatabase = async () => {
     await UserModel.bulkCreate(hashedUsers);
     console.log(
       'Testdaten für Benutzer wurden erfolgreich in die Datenbank eingefügt.'
+    );
+
+    // Fülle die Datenbank mit Testdaten für Events
+    await EventModel.bulkCreate(EventTestdata);
+    console.log(
+      'Testdaten für Events wurden erfolgreich in die Datenbank eingefügt.'
     );
   } catch (error) {
     console.error('Fehler bei der Initialisierung der Datenbank:', error);
