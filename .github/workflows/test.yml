@@ -16,10 +16,10 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }} # Root-Passwort für MySQL
-          MYSQL_USER: ${{ secrets.MYSQL_USER }} # Benutzername für MySQL
-          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }} # Passwort für den MySQL-Benutzer
-          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }} # Name der Datenbank
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}  # Root-Passwort für MySQL
+          MYSQL_USER: ${{ secrets.MYSQL_USER }}                    # Benutzername für MySQL
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}            # Passwort für den MySQL-Benutzer
+          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}            # Name der Datenbank
         ports:
           - 3306:3306
         options: >-
