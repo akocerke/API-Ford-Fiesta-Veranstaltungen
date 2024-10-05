@@ -16,9 +16,9 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_USER: ${{ secrets.MYSQL_USER }}                    # Benutzername für MySQL
-          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}            # Passwort für den MySQL-Benutzer
-          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}            # Name der Datenbank
+          MYSQL_USER: ${{ secrets.DB_USERNAME }}        # Benutzername für MySQL
+          MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}    # Passwort für den MySQL-Benutzer
+          MYSQL_DATABASE: ${{ secrets.DB_NAME }}        # Name der Datenbank
         ports:
           - 3306:3306
         options: >-
@@ -42,17 +42,16 @@ jobs:
       - name: Create .env.test.local
         run: |
           echo "PORT=${{ secrets.PORT }}" >> .env.test.local
-          echo "DB_HOST=localhost" >> .env.test.local
-          echo "DB_USERNAME=${{ secrets.MYSQL_USER }}" >> .env.test.local
-          echo "DB_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> .env.test.local
-          echo "DB_NAME=${{ secrets.MYSQL_DATABASE }}" >> .env.test.local
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env.test.local
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env.test.local
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env.test.local
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env.test.local
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env.test.local
           echo "LOG_LEVEL=${{ secrets.LOG_LEVEL }}" >> .env.test.local
 
       - name: Wait for MySQL
         run: |
-          export MYSQL_PWD="${{ secrets.MYSQL_PASSWORD }}"
-          while ! mysqladmin ping -h"localhost" -u"${{ secrets.MYSQL_USER }}" --silent; do
+          while ! mysql -h "${{ secrets.DB_HOST }}" -u"${{ secrets.DB_USERNAME }}" -p"${{ secrets.DB_PASSWORD }}" -e "SELECT 1"; do
             echo "Waiting for MySQL..."
             sleep 5
           done
@@ -60,7 +59,7 @@ jobs:
       - name: Setup Database with SQL script
         run: |
           echo "Setting up the database structure..."
-          mysql -h localhost -u${{ secrets.MYSQL_USER }} -p${{ secrets.MYSQL_PASSWORD }} ${{ secrets.MYSQL_DATABASE }} < db_script/test_veranstaltungskalender_ford_fiesta.sql
+          mysql -h "${{ secrets.DB_HOST }}" -u"${{ secrets.DB_USERNAME }}" -p"${{ secrets.DB_PASSWORD }}" "${{ secrets.DB_NAME }}" < db_script/test_veranstaltungskalender_ford_fiesta.sql
 
       - name: Run Jest tests
         run: npm run test
