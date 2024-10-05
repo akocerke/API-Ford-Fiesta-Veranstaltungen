@@ -34,9 +34,13 @@ const initializeDatabase = async () => {
 
     // Synchronisiere die abhängigen Tabellen (z. B. Events, Violations, Comments, Ratings)
     await EventModel.sync({ force: true }); // Erstelle die `events` Tabelle
+    console.log('Events-Tabelle wurde erstellt.');
     await ViolationModel.sync({ force: true }); // Erstelle die `violations` Tabelle
+    console.log('Violations-Tabelle wurde erstellt.');
     await CommentModel.sync({ force: true }); // Erstelle die `comments` Tabelle
+    console.log('Comments-Tabelle wurde erstellt.');
     await RatingModel.sync({ force: true }); // Erstelle die `ratings` Tabelle
+    console.log('Ratings-Tabelle wurde erstellt.');
     console.log('Datenbankstruktur wurde erfolgreich neu erstellt.');
 
     // Füge die Testdaten für Benutzer hinzu (Passwörter werden gehasht)
