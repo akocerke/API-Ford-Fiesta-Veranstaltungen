@@ -1,0 +1,199 @@
+openapi: 3.0.0
+paths:
+  /users/dashboard:
+    get:
+      tags:
+        - Benutzer
+      summary:
+        Zusammenfassung aller Events, Bewertungen, Kommentare und gemeldeten Verstöße gemeldeten Verstöße, Verstöße in Bearbeitung, Verstöße erledigt
+
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /users/profile:
+    get:
+      tags:
+        - Benutzer
+      summary: Benutzer Informationen [id, username, email, role, created_at]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    put:
+      tags:
+        - Benutzer
+      summary: Erlaubt es Benutzern mit der Rolle 'user' oder 'admin', ihre Benutzerdaten zu ändern
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                username: testuser5
+                email: testuser8@example.com
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /users/events:
+    get:
+      tags:
+        - Benutzer
+      summary: Alle Events eines angemeldeten Benutzers
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /users/events/update:
+    put:
+      tags:
+        - Benutzer
+      summary: Erlaubt es Benutzern mit der Role 'user' oder 'admin' sein erstelltes Event zu bearbeiten(updaten)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                id: 15
+                title: Test Event 67
+                description: This is a test event
+                date: '2024-12-25'
+                imageFileName: test-image.jpg
+                imageFileType: image/jpeg
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /users/events/delete:
+    delete:
+      tags:
+        - Benutzer
+      summary: Erlaubt es Benutzern mit der Role 'user' oder 'admin' sein erstelltes Event zu löschen
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /users/events/create:
+    post:
+      tags:
+        - Benutzer
+      summary: Erlaubt Benutzern mit der Rolle 'user' oder 'admin', ein Event zu erstellen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                title: Test Event 6
+                description: This is a test event
+                date: '2024-12-25'
+                imageFileName: test-image.jpg
+                imageFileType: image/jpeg
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Erfolgreiche Erstellung des Events
+          content:
+            application/json: {}
+  /users/events/rate:
+    post:
+      tags:
+        - Benutzer
+      summary: Erlaubt es Benutzern mit der Role 'user' oder 'admin' ein Event zu bewerten
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                eventId: 38
+                rating: 5
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /users/events/comment:
+    post:
+      tags:
+        - Benutzer
+      summary: Erlaubt es Benutzern mit der Role 'user' oder 'admin' ein Event zu kommentieren
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                eventId: 38
+                comment: This is a great event!
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /users/violations:
+    post:
+      tags:
+        - Benutzer
+      summary: Erlaubt Benutzern mit der Rolle 'user' oder 'admin', ein Verstoß zu melden
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                eventId: 41
+                reason: Inappropriate content
+                details: This event contains offensive language.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api-ford-fiesta/users/password:
+    post:
+      tags:
+        - Benutzer
+      summary: Erlaubt es Benutzern mit der Role 'user' oder 'admin' sein Passwort zu ändern
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                oldPassword: Test1234!
+                newPassword: Test12345!
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
