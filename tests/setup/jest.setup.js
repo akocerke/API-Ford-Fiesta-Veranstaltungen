@@ -4,14 +4,22 @@ require('dotenv').config({
 });
 require('../../index');
 const mysequelize = require('../../database/setup/database');
-const UserModel = require('../../database/models/User'); // Importiere das User-Modell
-const EventModel = require('../../database/models/Event'); // Importiere das Event-Modell
-const ViolationModel = require('../../database/models/Violation'); // Importiere das Violation-Modell
-const CommentModel = require('../../database/models/Comment'); // Importiere das Comment-Modell
-const RatingModel = require('../../database/models/Rating'); // Importiere das Rating-Modell
-const UserTestdata = require('./UserTestdata'); // Importiere Testdaten für User
-const EventTestdata = require('./EventTestData'); // Importiere Testdaten für Events
-const bcrypt = require('bcryptjs'); // Für Passwort-Hashing
+const UserModel = require('../../database/models/User');
+const EventModel = require('../../database/models/Event');
+const ViolationModel = require('../../database/models/Violation');
+const CommentModel = require('../../database/models/Comment');
+const RatingModel = require('../../database/models/Rating');
+const UserTestdata = require('./UserTestdata');
+const EventTestdata = require('./EventTestData');
+const bcrypt = require('bcryptjs');
+
+// Funktion zur Überprüfung, ob eine Tabelle existiert
+const tableExists = async (tableName) => {
+  const [results, metadata] = await mysequelize.query(
+    `SHOW TABLES LIKE '${tableName}';`
+  );
+  return results.length > 0;
+};
 
 const initializeDatabase = async () => {
   console.log('Starte die Initialisierung der Datenbank...');
@@ -20,7 +28,7 @@ const initializeDatabase = async () => {
     console.log('Datenbankname:', process.env.DB_NAME);
     console.log('Datenbankbenutzer:', process.env.DB_USERNAME);
 
-    // Drope die Tabellen in der richtigen Reihenfolge (die abhängigen Tabellen zuerst)
+    // Drope die Tabellen in der richtigen Reihenfolge
     await mysequelize.dropSchema('violations');
     await mysequelize.dropSchema('comments');
     await mysequelize.dropSchema('ratings');
@@ -28,28 +36,37 @@ const initializeDatabase = async () => {
     await mysequelize.dropSchema('users');
     console.log('Alle relevanten Schemata wurden gelöscht.');
 
-    // Zuerst `UserModel` synchronisieren (da andere Tabellen von `users` abhängen)
-    await UserModel.sync({ force: true }); // Erstelle die `users` Tabelle
+    // Zuerst `UserModel` synchronisieren
+    await UserModel.sync({ force: true });
     console.log('User-Tabelle wurde erstellt.');
 
-    // Synchronisiere die abhängigen Tabellen (z. B. Events, Violations, Comments, Ratings)
-    await EventModel.sync({ force: true }); // Erstelle die `events` Tabelle
+    // Überprüfen, ob die User-Tabelle existiert
+    const userTableExists = await tableExists('users');
+    console.log('User-Tabelle existiert:', userTableExists);
+
+    // Synchronisiere die abhängigen Tabellen
+    await EventModel.sync({ force: true });
     console.log('Events-Tabelle wurde erstellt.');
-    await ViolationModel.sync({ force: true }); // Erstelle die `violations` Tabelle
+
+    // Hier kannst du auch die anderen Tabellen synchronisieren, wenn nötig
+    await ViolationModel.sync({ force: true });
     console.log('Violations-Tabelle wurde erstellt.');
-    await CommentModel.sync({ force: true }); // Erstelle die `comments` Tabelle
+
+    await CommentModel.sync({ force: true });
     console.log('Comments-Tabelle wurde erstellt.');
-    await RatingModel.sync({ force: true }); // Erstelle die `ratings` Tabelle
+
+    await RatingModel.sync({ force: true });
     console.log('Ratings-Tabelle wurde erstellt.');
+
     console.log('Datenbankstruktur wurde erfolgreich neu erstellt.');
 
     // Füge die Testdaten für Benutzer hinzu (Passwörter werden gehasht)
     const hashedUsers = UserTestdata.map((user) => ({
       ...user,
-      password: bcrypt.hashSync(user.password, 10), // Passwort hashen
+      password: bcrypt.hashSync(user.password, 10),
     }));
 
-    await UserModel.bulkCreate(hashedUsers); // Testdaten für Benutzer einfügen
+    await UserModel.bulkCreate(hashedUsers);
     console.log(
       'Testdaten für Benutzer wurden erfolgreich in die Datenbank eingefügt.'
     );
@@ -59,18 +76,13 @@ const initializeDatabase = async () => {
     console.log(
       'Testdaten für Events wurden erfolgreich in die Datenbank eingefügt.'
     );
-
-    // Optional: Hier kannst du auch Testdaten für Violations, Comments, und Ratings hinzufügen
-    // await ViolationModel.bulkCreate(ViolationTestData);
-    // await CommentModel.bulkCreate(CommentTestData);
-    // await RatingModel.bulkCreate(RatingTestData);
   } catch (error) {
-    console.error('Fehler bei der Initialisierung der Datenbank:', error);
+    console.error(
+      'Fehler bei der Initialisierung der Datenbank:',
+      error.message
+    );
     console.error('Stacktrace:', error.stack);
-  } finally {
-    // Optional: Schließe die Verbindung nach Abschluss der Initialisierung
-    // await mysequelize.close();
   }
 };
 
-module.exports = initializeDatabase; // Exportiere die Funktion für Jest
+module.exports = initializeDatabase;
