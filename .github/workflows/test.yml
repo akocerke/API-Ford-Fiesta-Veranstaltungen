@@ -12,25 +12,18 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root  # Das Root-Passwort für den MySQL-Dienst
-          MYSQL_DATABASE: ${{ secrets.DB_NAME }}  # Die Datenbank, die für Tests verwendet wird
-          MYSQL_USER: ${{ secrets.DB_USERNAME }}  # Der Benutzer, den du verwenden möchtest
-          MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}  # Das Passwort für den Benutzer
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping --silent"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Set up MySQL
+        uses: shogo82148/actions-setup-mysql@v1
+        with:
+          mysql-version: "8.0"
+          root-password: "root"  # Hier kein Root-Passwort erforderlich
+          user: ${{ secrets.DB_USERNAME }}      # Benutzername für MySQL
+          password: ${{ secrets.DB_PASSWORD }}  # Passwort für den MySQL-Benutzer
+          # Es ist wichtig, dass der Benutzer vorher existiert oder mit MySQL initialisiert wurde
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -43,33 +36,36 @@ jobs:
       - name: Create .env.test.local
         run: |
           echo "PORT=${{ secrets.PORT }}" >> .env.test.local
-          echo "DB_HOST=localhost" >> .env.test.local  # Lokale MySQL-Instanz
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env.test.local  # DB_HOST ist 'localhost', wenn MySQL über die Aktion läuft
           echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env.test.local
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env.test.local
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env.test.local
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env.test.local
           echo "LOG_LEVEL=${{ secrets.LOG_LEVEL }}" >> .env.test.local
 
-      - name: Wait for MySQL to be ready
+      - name: Wait for MySQL
         run: |
-          echo "Waiting for MySQL to be ready..."
-          for i in {30..0}; do
-            if mysqladmin ping -h "localhost" --silent; then
-              echo "MySQL is up and running!"
-              break
+            max_attempts=20
+            attempt=0
+            while [[ $attempt -lt $max_attempts ]]; do
+              if mysql -h"${{ secrets.DB_HOST }}" -u"${{ secrets.DB_USERNAME }}" -p"${{ secrets.DB_PASSWORD }}" -e "SELECT 1;" &> /dev/null; then
+                echo "MySQL is up and running!"
+                break
+              else
+                echo "Waiting for MySQL... Attempt $((attempt+1)) of $max_attempts"
+                attempt=$((attempt + 1))
+                sleep 15
+              fi
+            done
+        
+            if [[ $attempt -eq $max_attempts ]]; then
+              echo "MySQL did not start in time!"
+              exit 1
             fi
-            echo "Waiting for MySQL... $i seconds remaining"
-            sleep 1
-          done
-          if [ "$i" = 0 ]; then
-            echo "MySQL did not start in time!"
-            exit 1
-          fi
-
       - name: Setup Database
         run: |
-          echo "Creating the database..."
-          mysql -h "localhost" -u"${{ secrets.DB_USERNAME }}" -p"${{ secrets.DB_PASSWORD }}" -e "CREATE DATABASE IF NOT EXISTS \`${{ secrets.DB_NAME }}\`;"
-
+              echo "Creating the database..."
+              mysql -h "localhost" -u"${{ secrets.DB_USERNAME }}" -p"${{ secrets.DB_PASSWORD }}" -e "CREATE DATABASE IF NOT EXISTS \`${{ secrets.DB_NAME }}\`;"
+          
       - name: Run Jest tests
         run: npm run test
