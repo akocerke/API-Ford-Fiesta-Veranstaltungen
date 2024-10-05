@@ -48,24 +48,24 @@ jobs:
 
       - name: Wait for MySQL
         run: |
-          export MYSQL_PWD="${{ secrets.DB_PASSWORD }}"
-          max_attempts=10  # Reduzieren Sie die Anzahl der Versuche
-          attempt=0
-          while [[ $attempt -lt $max_attempts ]]; do
-            if mysql -h "${{ secrets.DB_HOST }}" -u"${{ secrets.DB_USERNAME }}" -p"${MYSQL_PWD}" -e "SELECT 1;" &> /dev/null; then
-              echo "MySQL is up and running!"
-              break
-            else
-              echo "Waiting for MySQL... Attempt $((attempt+1)) of $max_attempts"
-              attempt=$((attempt + 1))
-              sleep 5  # Halten Sie die Wartezeit kurz, um schneller zu testen
+            export MYSQL_PWD="${{ secrets.DB_PASSWORD }}"
+            max_attempts=5
+            attempt=0
+            while [[ $attempt -lt $max_attempts ]]; do
+              if mysql -h "${{ secrets.DB_HOST }}" -u"${{ secrets.DB_USERNAME }}" -p"${MYSQL_PWD}" -e "SELECT 1;" &> /dev/null; then
+                echo "MySQL is up and running!"
+                break
+              else
+                echo "Waiting for MySQL... Attempt $((attempt+1)) of $max_attempts"
+                attempt=$((attempt + 1))
+                sleep 10
+              fi
+            done
+        
+            if [[ $attempt -eq $max_attempts ]]; then
+              echo "MySQL did not start in time!"
+              exit 1
             fi
-          done
-
-          if [[ $attempt -eq $max_attempts ]]; then
-            echo "MySQL did not start in time!"
-            exit 1
-          fi
 
 
 
