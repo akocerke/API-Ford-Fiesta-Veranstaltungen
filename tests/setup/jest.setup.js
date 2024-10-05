@@ -27,8 +27,11 @@ const initializeDatabase = async () => {
     await mysequelize.dropSchema('users');
     console.log('Alle relevanten Schemata wurden gelöscht.');
 
-    // Synchronisiere die Modelle in der korrekten Reihenfolge
+    // Zuerst `UserModel` synchronisieren (da andere Tabellen von `users` abhängen)
     await UserModel.sync({ force: true }); // Erstelle die `users` Tabelle
+    console.log('User-Tabelle wurde erstellt.');
+
+    // Synchronisiere die abhängigen Tabellen (z. B. Events, Violations, Comments, Ratings)
     await EventModel.sync({ force: true }); // Erstelle die `events` Tabelle
     await ViolationModel.sync({ force: true }); // Erstelle die `violations` Tabelle
     await CommentModel.sync({ force: true }); // Erstelle die `comments` Tabelle
@@ -56,6 +59,7 @@ const initializeDatabase = async () => {
     // await ViolationModel.bulkCreate(ViolationTestData);
     // await CommentModel.bulkCreate(CommentTestData);
     // await RatingModel.bulkCreate(RatingTestData);
+    
   } catch (error) {
     console.error('Fehler bei der Initialisierung der Datenbank:', error);
   } finally {
