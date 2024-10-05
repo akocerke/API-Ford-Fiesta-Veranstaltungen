@@ -62,6 +62,10 @@ jobs:
               echo "MySQL did not start in time!"
               exit 1
             fi
-
+      - name: Setup Database
+        run: |
+              echo "Creating the database..."
+              mysql -h "localhost" -u"${{ secrets.DB_USERNAME }}" -p"${{ secrets.DB_PASSWORD }}" -e "CREATE DATABASE IF NOT EXISTS \`${{ secrets.DB_NAME }}\`;"
+          
       - name: Run Jest tests
         run: npm run test
