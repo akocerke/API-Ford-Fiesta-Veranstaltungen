@@ -25,6 +25,7 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
+          --health-cmd="mysqladmin ping -h localhost -u${{ secrets.DB_USERNAME }} -p${{ secrets.DB_PASSWORD }}"
 
     steps:
       - name: Checkout code
