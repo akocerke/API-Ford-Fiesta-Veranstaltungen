@@ -62,6 +62,7 @@ const initializeDatabase = async () => {
     // await RatingModel.bulkCreate(RatingTestData);
   } catch (error) {
     console.error('Fehler bei der Initialisierung der Datenbank:', error);
+    console.error('Stacktrace:', error.stack);
   } finally {
     // Optional: Schließe die Verbindung nach Abschluss der Initialisierung
     // await mysequelize.close();
