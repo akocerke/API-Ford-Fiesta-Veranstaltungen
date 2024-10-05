@@ -1,0 +1,70 @@
+name: Run API Jest Tests
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - main
+      
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_DATABASE: ${{ secrets.DB_NAME }}
+          MYSQL_USER: ${{ secrets.DB_USERNAME }}
+          MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASSWORD }}  # Hier sicherstellen, dass ein Root-Passwort definiert ist
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 21.7.1
+
+      - name: Install API dependencies
+        run: npm install
+        working-directory: ./  # Passe diesen Pfad an, falls das root-Verzeichnis nicht der API-Pfad ist
+
+      - name: Create .env.test.local
+        run: |
+          echo "PORT=${{ secrets.PORT }}" >> .env.test.local
+          echo "DB_HOST=localhost" >> .env.test.local
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env.test.local
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env.test.local
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env.test.local
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env.test.local
+          echo "LOG_LEVEL=${{ secrets.LOG_LEVEL }}" >> .env.test.local
+
+      - name: Wait for MySQL
+        run: |
+          export MYSQL_PWD="${{ secrets.DB_PASSWORD }}"
+          until mysqladmin ping -h "localhost" -u "${{ secrets.DB_USERNAME }}" --silent; do
+            echo "Waiting for MySQL..."
+            sleep 5
+          done
+
+      - name: Setup Database with SQL script
+        run: |
+          echo "Setting up the database..."
+          mysql -h localhost -u ${{ secrets.DB_USERNAME }} -p${{ secrets.DB_PASSWORD }} ${{ secrets.DB_NAME }} < db_script/test_veranstaltungskalender_ford_fiesta.sql
+
+      - name: Run Jest tests
+        run: npm run test
+        working-directory: ./  # Passe diesen Pfad an, falls notwendig
