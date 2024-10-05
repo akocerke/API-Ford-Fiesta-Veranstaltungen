@@ -7,7 +7,7 @@ on:
   pull_request:
     branches:
       - main
-      
+      - dev
 
 jobs:
   test:
@@ -15,19 +15,19 @@ jobs:
 
     services:
       mysql:
-        image: mysql:latest
+        image: mysql:8.0
         env:
-          MYSQL_DATABASE: ${{ secrets.DB_NAME }}
-          MYSQL_USER: ${{ secrets.DB_USERNAME }}
-          MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASSWORD }}  # Hier sicherstellen, dass ein Root-Passwort definiert ist
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          MYSQL_USER: ${{ secrets.MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping --silent"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
+          --health-cmd "mysqladmin ping -h localhost -u${{ secrets.MYSQL_USER }} -p${{ secrets.MYSQL_PASSWORD }}"
+          --health-interval 15s
+          --health-timeout 5s
+          --health-retries 30
 
     steps:
       - name: Checkout code
@@ -40,30 +40,30 @@ jobs:
 
       - name: Install API dependencies
         run: npm install
-        working-directory: ./  # Passe diesen Pfad an, falls das root-Verzeichnis nicht der API-Pfad ist
+        working-directory: ./  # Passe diesen Pfad an, falls notwendig
 
       - name: Create .env.test.local
         run: |
           echo "PORT=${{ secrets.PORT }}" >> .env.test.local
           echo "DB_HOST=localhost" >> .env.test.local
-          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env.test.local
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env.test.local
-          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env.test.local
+          echo "DB_USERNAME=${{ secrets.MYSQL_USER }}" >> .env.test.local
+          echo "DB_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> .env.test.local
+          echo "DB_NAME=${{ secrets.MYSQL_DATABASE }}" >> .env.test.local
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env.test.local
           echo "LOG_LEVEL=${{ secrets.LOG_LEVEL }}" >> .env.test.local
 
       - name: Wait for MySQL
         run: |
-          export MYSQL_PWD="${{ secrets.DB_PASSWORD }}"
-          until mysqladmin ping -h "localhost" -u "${{ secrets.DB_USERNAME }}" --silent; do
+          export MYSQL_PWD="${{ secrets.MYSQL_PASSWORD }}"
+          while ! mysqladmin ping -h"localhost" -u"${{ secrets.MYSQL_USER }}" --silent; do
             echo "Waiting for MySQL..."
             sleep 5
           done
 
       - name: Setup Database with SQL script
         run: |
-          echo "Setting up the database..."
-          mysql -h localhost -u ${{ secrets.DB_USERNAME }} -p${{ secrets.DB_PASSWORD }} ${{ secrets.DB_NAME }} < db_script/test_veranstaltungskalender_ford_fiesta.sql
+          echo "Setting up the database structure..."
+          mysql -h localhost -u${{ secrets.MYSQL_USER }} -p${{ secrets.MYSQL_PASSWORD }} ${{ secrets.MYSQL_DATABASE }} < db_script/test_veranstaltungskalender_ford_fiesta.sql
 
       - name: Run Jest tests
         run: npm run test
