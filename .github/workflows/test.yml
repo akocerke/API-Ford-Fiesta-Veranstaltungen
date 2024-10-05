@@ -16,7 +16,6 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: ""  # Hier wird kein Root-Passwort benötigt
           MYSQL_USER: ${{ secrets.DB_USERNAME }}     # Benutzername für MySQL
           MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }} # Passwort für den MySQL-Benutzer
           MYSQL_DATABASE: ${{ secrets.DB_NAME }}     # Name der Datenbank
@@ -34,12 +33,11 @@ jobs:
 
       - name: Install API dependencies
         run: npm install
-        working-directory: ./  # Passe diesen Pfad an, falls notwendig
 
       - name: Create .env.test.local
         run: |
           echo "PORT=${{ secrets.PORT }}" >> .env.test.local
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env.test.local # Hier das Secret verwenden
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env.test.local
           echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env.test.local
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env.test.local
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env.test.local
@@ -49,7 +47,7 @@ jobs:
       - name: Wait for MySQL
         run: |
             export MYSQL_PWD="${{ secrets.DB_PASSWORD }}"
-            max_attempts=5
+            max_attempts=10
             attempt=0
             while [[ $attempt -lt $max_attempts ]]; do
               if mysql -h "${{ secrets.DB_HOST }}" -u"${{ secrets.DB_USERNAME }}" -p"${MYSQL_PWD}" -e "SELECT 1;" &> /dev/null; then
@@ -67,13 +65,15 @@ jobs:
               exit 1
             fi
 
-
+      - name: Check MySQL logs
+        run: |
+          sleep 5
+          docker logs $(docker ps -q --filter ancestor=mysql:8.0) || echo "No MySQL logs available."
 
       - name: Setup Database with SQL script
         run: |
           echo "Setting up the database structure..."
-          mysql -h "${{ secrets.DB_HOST }}" -u"${{ secrets.DB_USERNAME }}" "${{ secrets.DB_NAME }}" < db_script/test_veranstaltungskalender_ford_fiesta.sql
+          mysql -h "${{ secrets.DB_HOST }}" -u"${{ secrets.DB_USERNAME }}" -p"${MYSQL_PWD}" "${{ secrets.DB_NAME }}" < db_script/test_veranstaltungskalender_ford_fiesta.sql
 
       - name: Run Jest tests
         run: npm run test
-        working-directory: ./  # Passe diesen Pfad an, falls notwendig
