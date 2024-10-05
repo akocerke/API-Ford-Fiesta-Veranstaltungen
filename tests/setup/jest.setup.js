@@ -8,7 +8,7 @@ const mysequelize = require('../../database/setup/database');
 const UserModel = require('../../database/models/User'); // Importiere dein User-Modell
 const EventModel = require('../../database/models/Event'); // Importiere dein Event-Modell
 const UserTestdata = require('./UserTestdata'); // Importiere die Testdaten für Benutzer
-const EventTestdata = require('./EventTestdata'); // Importiere die Testdaten für Events
+const EventTestdata = require('./EventTestData'); // Importiere die Testdaten für Events
 const bcrypt = require('bcryptjs'); // Bcrypt für das Hashing der Passwörter
 
 const initializeDatabase = async () => {
