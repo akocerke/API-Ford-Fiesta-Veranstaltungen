@@ -1,27 +1,25 @@
-// tests/setup/EventTestData.js
+// Beispiel Testdaten für Events mit user_id
 const EventTestdata = [
   {
-    user_id: 1, // Referenziert den Benutzer mit ID 1
     title: 'Ford Fiesta Treffen',
     description: 'Ein Treffen für alle Ford Fiesta-Enthusiasten!',
-    date: new Date('2024-10-15T10:00:00Z'), // Zukunftstermin
+    date: '2024-10-15 10:00:00',
     image: 'https://example.com/fiesta-treffen.jpg',
+    user_id: 1, // Setze hier einen gültigen user_id-Wert
   },
   {
-    user_id: 1, // Referenziert den Benutzer mit ID 1
     title: 'Reparatur-Workshop',
     description: 'Lerne, wie man den Ford Fiesta wartet und repariert.',
-    date: new Date('2024-11-20T14:00:00Z'), // Zukunftstermin
+    date: '2024-11-20 14:00:00',
     image: 'https://example.com/fiesta-workshop.jpg',
+    user_id: 1, // Setze hier einen gültigen user_id-Wert
   },
   {
-    user_id: 2, // Referenziert den Benutzer mit ID 2
     title: 'Sonntagsausfahrt',
     description:
       'Eine entspannte Ausfahrt durch die Landschaft mit dem Ford Fiesta.',
-    date: new Date('2024-12-05T09:00:00Z'), // Zukunftstermin
+    date: '2024-12-05 09:00:00',
     image: 'https://example.com/fiesta-ausfahrt.jpg',
+    user_id: 1, // Setze hier einen gültigen user_id-Wert
   },
 ];
-
-module.exports = EventTestdata;
