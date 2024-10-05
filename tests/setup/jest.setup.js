@@ -18,6 +18,7 @@ const initializeDatabase = async () => {
 
   try {
     console.log('Datenbankname:', process.env.DB_NAME);
+    console.log('Datenbankbenutzer:', process.env.DB_USERNAME);
 
     // Drope die Tabellen in der richtigen Reihenfolge (die abhängigen Tabellen zuerst)
     await mysequelize.dropSchema('violations');
@@ -59,7 +60,6 @@ const initializeDatabase = async () => {
     // await ViolationModel.bulkCreate(ViolationTestData);
     // await CommentModel.bulkCreate(CommentTestData);
     // await RatingModel.bulkCreate(RatingTestData);
-    
   } catch (error) {
     console.error('Fehler bei der Initialisierung der Datenbank:', error);
   } finally {
