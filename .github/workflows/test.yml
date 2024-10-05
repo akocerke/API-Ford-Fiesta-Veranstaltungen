@@ -20,10 +20,10 @@ jobs:
         uses: shogo82148/actions-setup-mysql@v1
         with:
           mysql-version: "8.0"
-          MYSQL_ROOT_PASSWORD: ""  # Hier kein Root-Passwort erforderlich
-          MYSQL_USER: ${{ secrets.DB_USERNAME }}      # Benutzername für MySQL
-          MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}  # Passwort für den MySQL-Benutzer
-          MYSQL_DATABASE: ${{ secrets.DB_NAME }}      # Name der Datenbank
+          root-password: ""  # Hier kein Root-Passwort erforderlich
+          user: ${{ secrets.DB_USERNAME }}      # Benutzername für MySQL
+          password: ${{ secrets.DB_PASSWORD }}  # Passwort für den MySQL-Benutzer
+          # Es ist wichtig, dass der Benutzer vorher existiert oder mit MySQL initialisiert wurde
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -36,7 +36,7 @@ jobs:
       - name: Create .env.test.local
         run: |
           echo "PORT=${{ secrets.PORT }}" >> .env.test.local
-          echo "DB_HOST=localhost" >> .env.test.local  # DB_HOST ist 'localhost', wenn MySQL über die Aktion läuft
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env.test.local  # DB_HOST ist 'localhost', wenn MySQL über die Aktion läuft
           echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env.test.local
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env.test.local
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env.test.local
@@ -48,7 +48,7 @@ jobs:
             max_attempts=20
             attempt=0
             while [[ $attempt -lt $max_attempts ]]; do
-              if mysql -h "localhost" -u"${{ secrets.DB_USERNAME }}" -p"${{ secrets.DB_PASSWORD }}" -e "SELECT 1;" &> /dev/null; then
+              if mysql -h"${{ secrets.DB_HOST }}" -u"${{ secrets.DB_USERNAME }}" -p"${{ secrets.DB_PASSWORD }}" -e "SELECT 1;" &> /dev/null; then
                 echo "MySQL is up and running!"
                 break
               else
@@ -62,6 +62,11 @@ jobs:
               echo "MySQL did not start in time!"
               exit 1
             fi
+
+      - name: Setup Database
+        run: |
+          echo "Creating the database..."
+          mysql -h "localhost" -u"${{ secrets.DB_USERNAME }}" -p"${{ secrets.DB_PASSWORD }}" -e "CREATE DATABASE IF NOT EXISTS \`${{ secrets.DB_NAME }}\`;"
 
       - name: Setup Database with SQL script
         run: |
