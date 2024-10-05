@@ -12,19 +12,18 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_USER: ${{ secrets.DB_USERNAME }}     # Benutzername für MySQL
-          MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }} # Passwort für den MySQL-Benutzer
-          MYSQL_DATABASE: ${{ secrets.DB_NAME }}     # Name der Datenbank
-        ports:
-          - 3306:3306
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Set up MySQL
+        uses: shogo82148/actions-setup-mysql@v1
+        with:
+          mysql-version: "8.0"
+          MYSQL_ROOT_PASSWORD: ""  # Hier kein Root-Passwort erforderlich
+          MYSQL_USER: ${{ secrets.DB_USERNAME }}      # Benutzername für MySQL
+          MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}  # Passwort für den MySQL-Benutzer
+          MYSQL_DATABASE: ${{ secrets.DB_NAME }}      # Name der Datenbank
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -37,7 +36,7 @@ jobs:
       - name: Create .env.test.local
         run: |
           echo "PORT=${{ secrets.PORT }}" >> .env.test.local
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env.test.local
+          echo "DB_HOST=localhost" >> .env.test.local  # DB_HOST ist 'localhost', wenn MySQL über die Aktion läuft
           echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env.test.local
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env.test.local
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env.test.local
@@ -46,17 +45,16 @@ jobs:
 
       - name: Wait for MySQL
         run: |
-            export MYSQL_PWD="${{ secrets.DB_PASSWORD }}"
-            max_attempts=10
+            max_attempts=20
             attempt=0
             while [[ $attempt -lt $max_attempts ]]; do
-              if mysql -h "${{ secrets.DB_HOST }}" -u"${{ secrets.DB_USERNAME }}" -p"${MYSQL_PWD}" -e "SELECT 1;" &> /dev/null; then
+              if mysql -h "localhost" -u"${{ secrets.DB_USERNAME }}" -p"${{ secrets.DB_PASSWORD }}" -e "SELECT 1;" &> /dev/null; then
                 echo "MySQL is up and running!"
                 break
               else
                 echo "Waiting for MySQL... Attempt $((attempt+1)) of $max_attempts"
                 attempt=$((attempt + 1))
-                sleep 10
+                sleep 15
               fi
             done
         
@@ -65,15 +63,10 @@ jobs:
               exit 1
             fi
 
-      - name: Check MySQL logs
-        run: |
-          sleep 5
-          docker logs $(docker ps -q --filter ancestor=mysql:8.0) || echo "No MySQL logs available."
-
       - name: Setup Database with SQL script
         run: |
           echo "Setting up the database structure..."
-          mysql -h "${{ secrets.DB_HOST }}" -u"${{ secrets.DB_USERNAME }}" -p"${MYSQL_PWD}" "${{ secrets.DB_NAME }}" < db_script/test_veranstaltungskalender_ford_fiesta.sql
+          mysql -h "localhost" -u"${{ secrets.DB_USERNAME }}" -p"${{ secrets.DB_PASSWORD }}" "${{ secrets.DB_NAME }}" < db_script/test_veranstaltungskalender_ford_fiesta.sql
 
       - name: Run Jest tests
         run: npm run test
