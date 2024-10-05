@@ -10,7 +10,14 @@ const ViolationModel = require('../../database/models/Violation');
 const CommentModel = require('../../database/models/Comment');
 const RatingModel = require('../../database/models/Rating');
 const UserTestdata = require('./UserTestdata');
+const EventTestdata = require('./EventTestData');
 const bcrypt = require('bcryptjs');
+
+// Funktion zur Überprüfung, ob eine Tabelle existiert
+const tableExists = async (tableName) => {
+  const [results] = await mysequelize.query(`SHOW TABLES LIKE '${tableName}';`);
+  return results.length > 0;
+};
 
 const initializeDatabase = async () => {
   console.log('Starte die Initialisierung der Datenbank...');
@@ -30,6 +37,10 @@ const initializeDatabase = async () => {
     // Zuerst `UserModel` synchronisieren
     await UserModel.sync({ force: true });
     console.log('User-Tabelle wurde erstellt.');
+
+    // Überprüfen, ob die User-Tabelle existiert
+    const userTableExists = await tableExists('users');
+    console.log('User-Tabelle existiert:', userTableExists);
 
     // Synchronisiere die abhängigen Tabellen
     await EventModel.sync({ force: true });
@@ -52,17 +63,21 @@ const initializeDatabase = async () => {
       ...user,
       password: bcrypt.hashSync(user.password, 10),
     }));
-
     await UserModel.bulkCreate(hashedUsers);
     console.log(
       'Testdaten für Benutzer wurden erfolgreich in die Datenbank eingefügt.'
+    );
+
+    // Füge die Testdaten für Events ein
+    await EventModel.bulkCreate(EventTestdata);
+    console.log(
+      'Testdaten für Events wurden erfolgreich in die Datenbank eingefügt.'
     );
   } catch (error) {
     console.error(
       'Fehler bei der Initialisierung der Datenbank:',
       error.message
     );
-    console.error('Stacktrace:', error.stack);
   }
 };
 
