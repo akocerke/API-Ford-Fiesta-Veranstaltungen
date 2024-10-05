@@ -1,56 +1,67 @@
-// setup/jest.setup.js
 const path = require('path');
 require('dotenv').config({
   path: path.resolve(__dirname, '../../.env.test.local'),
 });
 require('../../index');
 const mysequelize = require('../../database/setup/database');
-const UserModel = require('../../database/models/User'); // Importiere dein User-Modell
-const EventModel = require('../../database/models/Event'); // Importiere dein Event-Modell
-const UserTestdata = require('./UserTestdata'); // Importiere die Testdaten für Benutzer
-const EventTestdata = require('./EventTestData'); // Importiere die Testdaten für Events
-const bcrypt = require('bcryptjs'); // Bcrypt für das Hashing der Passwörter
+const UserModel = require('../../database/models/User'); // Importiere das User-Modell
+const EventModel = require('../../database/models/Event'); // Importiere das Event-Modell
+const ViolationModel = require('../../database/models/Violation'); // Importiere das Violation-Modell
+const CommentModel = require('../../database/models/Comment'); // Importiere das Comment-Modell
+const RatingModel = require('../../database/models/Rating'); // Importiere das Rating-Modell
+const UserTestdata = require('./UserTestdata'); // Importiere Testdaten für User
+const EventTestdata = require('./EventTestData'); // Importiere Testdaten für Events
+const bcrypt = require('bcryptjs'); // Für Passwort-Hashing
 
 const initializeDatabase = async () => {
   console.log('Starte die Initialisierung der Datenbank...');
 
   try {
-    console.log(process.env.DB_NAME);
+    console.log('Datenbankname:', process.env.DB_NAME);
 
-    // Drope das Schema oder die Tabelle (je nach deiner Datenbankstruktur)
+    // Drope die Tabellen in der richtigen Reihenfolge (die abhängigen Tabellen zuerst)
     await mysequelize.dropSchema('violations');
     await mysequelize.dropSchema('comments');
     await mysequelize.dropSchema('ratings');
     await mysequelize.dropSchema('events');
     await mysequelize.dropSchema('users');
-    console.log('Schema "users" und "events" wurden gelöscht.');
+    console.log('Alle relevanten Schemata wurden gelöscht.');
 
-    // Synchronisiere die Modelle (Tabellen erstellen)
-    await mysequelize.sync({ force: true });
-    console.log('Datenbankstruktur wurde neu erstellt.');
+    // Synchronisiere die Modelle in der korrekten Reihenfolge
+    await UserModel.sync({ force: true }); // Erstelle die `users` Tabelle
+    await EventModel.sync({ force: true }); // Erstelle die `events` Tabelle
+    await ViolationModel.sync({ force: true }); // Erstelle die `violations` Tabelle
+    await CommentModel.sync({ force: true }); // Erstelle die `comments` Tabelle
+    await RatingModel.sync({ force: true }); // Erstelle die `ratings` Tabelle
+    console.log('Datenbankstruktur wurde erfolgreich neu erstellt.');
 
-    // Fülle die Datenbank mit Testdaten für Benutzer (Passwörter werden gehasht)
+    // Füge die Testdaten für Benutzer hinzu (Passwörter werden gehasht)
     const hashedUsers = UserTestdata.map((user) => ({
       ...user,
       password: bcrypt.hashSync(user.password, 10), // Passwort hashen
     }));
 
-    await UserModel.bulkCreate(hashedUsers);
+    await UserModel.bulkCreate(hashedUsers); // Testdaten für Benutzer einfügen
     console.log(
       'Testdaten für Benutzer wurden erfolgreich in die Datenbank eingefügt.'
     );
 
-    // Fülle die Datenbank mit Testdaten für Events
+    // Füge die Testdaten für Events ein
     await EventModel.bulkCreate(EventTestdata);
     console.log(
       'Testdaten für Events wurden erfolgreich in die Datenbank eingefügt.'
     );
+
+    // Optional: Hier kannst du auch Testdaten für Violations, Comments, und Ratings hinzufügen
+    // await ViolationModel.bulkCreate(ViolationTestData);
+    // await CommentModel.bulkCreate(CommentTestData);
+    // await RatingModel.bulkCreate(RatingTestData);
   } catch (error) {
     console.error('Fehler bei der Initialisierung der Datenbank:', error);
   } finally {
-    // Schließe die Verbindung
+    // Optional: Schließe die Verbindung nach Abschluss der Initialisierung
     // await mysequelize.close();
   }
 };
 
-module.exports = initializeDatabase; // Exports die Funktion für Jest
+module.exports = initializeDatabase; // Exportiere die Funktion für Jest
