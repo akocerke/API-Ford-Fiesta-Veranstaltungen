@@ -22,10 +22,6 @@ jobs:
           MYSQL_DATABASE: ${{ secrets.DB_NAME }}     # Name der Datenbank
         ports:
           - 3306:3306
-        options: >-
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
 
     steps:
       - name: Checkout code
@@ -43,7 +39,7 @@ jobs:
       - name: Create .env.test.local
         run: |
           echo "PORT=${{ secrets.PORT }}" >> .env.test.local
-          echo "DB_HOST=localhost" >> .env.test.local
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env.test.local
           echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env.test.local
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env.test.local
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env.test.local
