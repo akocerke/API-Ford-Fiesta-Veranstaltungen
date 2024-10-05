@@ -63,7 +63,7 @@ describe('Benutzer-Routen', () => {
       .send({
         eventId,
         rating: 5,
-        userId, // userId hinzufügen, falls die API dies benötigt
+        // userId,
       });
 
     // Überprüfe, ob die Bewertung erfolgreich hinzugefügt wurde
@@ -77,7 +77,7 @@ describe('Benutzer-Routen', () => {
       .send({
         eventId,
         comment: 'Tolles Event!',
-        userId, // userId hinzufügen, falls die API dies benötigt
+        // userId, // userId hinzufügen, falls die API dies benötigt
       });
 
     // Überprüfe, ob der Kommentar erfolgreich hinzugefügt wurde
