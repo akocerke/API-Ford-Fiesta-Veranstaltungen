@@ -33,7 +33,7 @@ describe('Benutzer-Routen', () => {
 
     token = loginResponse.body.token;
 
-    // Dekodiere das Token, um die Benutzer-ID zu extrahieren
+    // Dekodieren des Token, um die Benutzer-ID zu extrahieren
     const decoded = jwt.decode(token);
     userId = decoded.id;
 
